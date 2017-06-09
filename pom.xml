@@ -62,6 +62,46 @@
                     </archive>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>com.github.wvengen</groupId>
+                <artifactId>proguard-maven-plugin</artifactId>
+                <version>2.0.14</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>net.sf.proguard</groupId>
+                        <artifactId>proguard-base</artifactId>
+                        <version>5.3.1</version>
+                        <scope>runtime</scope>
+                    </dependency>
+                </dependencies>
+
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>proguard</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <obfuscate>true</obfuscate>
+                    <outjar>uteev.HW1-small.jar</outjar>
+
+                    <!-- <proguardInclude>${basedir}/proguard.conf</proguardInclude> -->
+
+                    <options>
+                        <option>-keep public class uteevbkru.Main { public static void main(java.lang.String[]);}</option>
+                        <option>-dontwarn</option>
+                    </options>
+
+                    <libs>
+                        <lib>${java.home}/lib/rt.jar</lib>
+                    </libs>
+
+                </configuration>
+            </plugin>
+
         </plugins>
 
     </build>
