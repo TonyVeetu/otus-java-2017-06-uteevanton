@@ -72,7 +72,6 @@
                         <groupId>net.sf.proguard</groupId>
                         <artifactId>proguard-base</artifactId>
                         <version>5.3.1</version>
-                        <scope>runtime</scope>
                     </dependency>
                 </dependencies>
 
@@ -87,18 +86,14 @@
                 <configuration>
                     <obfuscate>true</obfuscate>
                     <outjar>uteev.HW1-small.jar</outjar>
-
                     <!-- <proguardInclude>${basedir}/proguard.conf</proguardInclude> -->
-
                     <options>
                         <option>-keep public class uteevbkru.Main { public static void main(java.lang.String[]);}</option>
                         <option>-dontwarn</option>
                     </options>
-
                     <libs>
                         <lib>${java.home}/lib/rt.jar</lib>
                     </libs>
-
                 </configuration>
             </plugin>
 
