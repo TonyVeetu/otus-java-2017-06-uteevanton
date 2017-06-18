@@ -1,22 +1,53 @@
-package ru.otus.lottery;
+package uteevbkru;
 
-import java.io.IOException;
+import java.lang.management.ManagementFactory;
 
 /**
- * Created by tully.
+ * VM options -Xmx512m -Xms512m
+ * <p>
+ * Runtime runtime = Runtime.getRuntime();
+ * long mem = runtime.totalMemory() - runtime.freeMemory();
+ * <p>
+ * System.gc()
+ * <p>
+ * jconsole, connect to pid
  */
+@SuppressWarnings({"RedundantStringConstructorCall", "InfiniteLoopStatement"})
 public class Main {
-    private static final int MAX_WINNERS_COUNT = 3;
+    public static void main(String... args) throws InterruptedException {
+        System.out.println("pid: " + ManagementFactory.getRuntimeMXBean().getName());
 
-    public static void main(String[] args) throws IOException {
-        String pathToFile = "emails.csv";
+        Desk desk = new Desk();
+        desk.prepare();
 
-        String seedString = "May the Force be with you";
+        desk.measure(Object::new, "Object");
+        desk.clean();
+        desk.measure(Object::new, "Object");
+        desk.clean();
+        desk.measure(Object::new, "Object");
+        desk.clean();
 
-        new Lottery(
-                new EmailsReader(pathToFile),
-                new LotteryMachine(MAX_WINNERS_COUNT),
-                seedString
-        ).run();
+        desk.measure(String::new, "String with pool");
+        desk.clean();
+        desk.measure(String::new, "String with pool");
+        desk.clean();
+        desk.measure(String::new, "String with pool");
+        desk.clean();
+
+
+        desk.measure(() -> new String(new char[0]), "String");
+        desk.clean();
+        desk.measure(() -> new String(new char[0]), "String");
+        desk.clean();
+        desk.measure(() -> new String(new char[0]), "String");
+        desk.clean();
+
+        desk.measure(() -> new Desk(1), "Desk(1)");
+        desk.clean();
+        desk.measure(() -> new Desk(5), "Desk(5)");
+        desk.clean();
+        desk.measure(() -> new Desk(10), "Desk(10)");
+        desk.clean();
+
     }
 }
