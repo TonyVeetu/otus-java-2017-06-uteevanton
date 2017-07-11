@@ -15,8 +15,8 @@ public class TonyVettuList<T> implements List<T>{
     private Object[] array = new Object[INIT_SIZE];
     private int size = 0;
 
-    public void TonyVettuList(){
-        //TODO
+    public void TonyVettuList(int count){
+        Object[] array = new Object[count];
     }
     //++++++++++++
     @Override
@@ -28,10 +28,7 @@ public class TonyVettuList<T> implements List<T>{
     public boolean isEmpty(){
         return size() == 0;
     }
-
-    //**********
-    //TODO
-    //**********
+    //-------------
     @Override
     public Iterator<T> iterator(){
         return  null;
@@ -132,11 +129,10 @@ public class TonyVettuList<T> implements List<T>{
         for(int i = 0; i < a.length; i++){
             sizePlus();
             array[size++] = a[i];
-            //add(a[i]); Почему не работает??? TODO think
         }
         return true;
     }
-
+    //++++++++++++
     /**
      * !!!!!!!!______Интересная функция_____!!!!!!!!!
      *
@@ -209,7 +205,7 @@ public class TonyVettuList<T> implements List<T>{
     //+++++++++++++++
     @Override
     public void clear(){
-        for(int i = 0; i < array.length; i++)//TODO  ?? может size
+        for(int i = 0; i < array.length; i++)
             array[i] = null;
     }
     //+++++++++++++
@@ -319,9 +315,9 @@ public class TonyVettuList<T> implements List<T>{
     }
 
     private void checkRanges(int index){
-        // Index не может быть равен size!!!
+        // Index стартует с 0 и не может быть равен size!!!
         // size на один всегда больше!!!!
-        if((index > size) || (index < 0))
+        if((index >= size) || (index < 0))
             throw new IndexOutOfBoundsException("Index " + index + " size" + size);
     }
 
@@ -391,7 +387,7 @@ public class TonyVettuList<T> implements List<T>{
                 throw new NoSuchElementException();
             Object[] arr = TonyVettuList.this.array;
             if(i >= arr.length)
-                throw new ConcurrentModificationException();// TODO think ___?????____Why not is IndexOutOfBoundsException()?
+                throw new ConcurrentModificationException();
             cursor = i;
             return (T) arr[lastRet = i];
         }
@@ -408,7 +404,7 @@ public class TonyVettuList<T> implements List<T>{
                 throw new NoSuchElementException();
             Object[] arr = TonyVettuList.this.array;
             if(i >= arr.length)
-                throw new ConcurrentModificationException();// TODO think ___?????____Why not is IndexOutOfBoundsException()?
+                throw new ConcurrentModificationException();
             cursor = i + 1;
             return (T) arr[lastRet = i];
         }
@@ -446,8 +442,8 @@ public class TonyVettuList<T> implements List<T>{
         }
 
         private void checkForComodification() {
-//            if (modCount != expectedModCount)
-//                throw new ConcurrentModificationException();
+            if (modCount != expectedModCount)
+                throw new ConcurrentModificationException();
             //TODO check HOW i use modCount!
         }
     }

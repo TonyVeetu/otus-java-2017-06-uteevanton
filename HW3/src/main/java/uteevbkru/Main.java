@@ -1,26 +1,10 @@
 package uteevbkru;
 
-//import java.lang.management.ManagementFactory;
-
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
-/**
- * VM options -Xmx512m -Xms512m
- * <p>
- * Runtime runtime = Runtime.getRuntime();
- * long mem = runtime.totalMemory() - runtime.freeMemory();
- * <p>
- * System.gc()
- * <p>
- * jconsole, connect to pid
- */
-//@SuppressWarnings({"RedundantStringConstructorCall", "InfiniteLoopStatement"})
 public class Main {
     public static void main(String... args){
-
 
         /**
          * TEST 1 - add(int  index, int value)
@@ -46,26 +30,40 @@ public class Main {
         Collections.addAll(mas, in);
         printTony(mas);
         /**
-         * TEST 3 - sort
+         * TEST 3 - copy
+         */
+        TonyVettuList<Integer> copyedMas = new TonyVettuList<>();
+        for(int i = 0; i < 12; i++) {
+            copyedMas.add(i);
+        }
+        Collections.copy(copyedMas, mas);
+        System.out.println();
+        System.out.println("***___Copied mas___***");
+        printTony(copyedMas);
+        /**
+         * TEST 4 - sort
          */
         Collections.sort(mas, new Comparator<Integer>() {
             public int compare(Integer o1, Integer o2) {
                 return o1.compareTo(o2);
             }
         });
-
-        System.out.println();
-        System.out.println("______*****SORT******______");
-        for(int i = 0; i < mas.size(); i++){
-            System.out.print(mas.get(i) + " ");
-        }
-
+        printTony(mas);
     }
 
-    private static void printTony(TonyVettuList<Integer> a){
+    private static boolean printTony(TonyVettuList<Integer> a){
+        if(a.equals(null)) {
+            System.out.println("printTony: Mas = null");
+            return false;
+        }
+        if(a.size() == 0){
+            System.out.println("printTony: Mas size = 0");
+            return false;
+        }
         System.out.println();
         for(int i = 0; i < a.size(); i++){
             System.out.print(a.get(i) + " ");
         }
+        return true;
     }
 }
