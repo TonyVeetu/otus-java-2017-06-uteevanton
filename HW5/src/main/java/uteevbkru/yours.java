@@ -5,10 +5,10 @@ import Annotations.BeforeTestUt;
 import Annotations.TestUt;
 
 /**
- * Created by anton on 23.07.17.
+ * Created by anton on 06.08.17.
  */
+public class yours {
 
-public class my {
     private int a;
     private int b;
 
@@ -19,28 +19,28 @@ public class my {
     }
     @TestUt
     public void myfunc(){
-        a += 1;
+        a -= 1;
         System.out.println("ann test " + a);
     }
     @AfterTestUt
     public void after(){
-        a += 2;
+        a -= 2;
         System.out.println("ann after " + a);
     }
 
     @BeforeTestUt
     public void before1(){
-        b = 100;
+        b = -100;
         System.out.println("ann before " + b);
     }
     @TestUt
     public void myfunc1(){
-        b += 5;
+        b -= 8;
         System.out.println("ann test " + b);
     }
     @AfterTestUt
     public void after1(){
-        b += 6;
+        b -= 9;
         System.out.println("ann after " + b);
     }
 }

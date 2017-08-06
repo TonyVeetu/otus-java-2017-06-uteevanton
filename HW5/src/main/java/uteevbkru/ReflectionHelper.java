@@ -28,7 +28,6 @@ public class ReflectionHelper {
     }
 
     static public ArrayList<Method> findAnnotations(Class clazz, String name) {
-        //Method[] myMethods = new Method[100];
         ArrayList<Method> myMethods = new ArrayList<>();
         Method[] methods = clazz.getDeclaredMethods();
         for (Method m : methods) {
