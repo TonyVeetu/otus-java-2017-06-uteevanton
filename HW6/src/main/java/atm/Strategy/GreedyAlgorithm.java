@@ -1,7 +1,7 @@
-package uteevbkru.Strategy;
+package atm.Strategy;
 
-import uteevbkru.Atm;
-import uteevbkru.Cell;
+import atm.Atm;
+import atm.Cell;
 
 import java.util.ArrayList;
 

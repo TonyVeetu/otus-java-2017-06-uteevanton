@@ -1,6 +1,6 @@
-package uteevbkru;
+package atm;
 
-import uteevbkru.Money.Money;
+import atm.Money.Money;
 
 /**
  * Created by anton on 27.07.17.
@@ -15,7 +15,7 @@ public class Cell {
     private int countOfNote = 1;// количество купюр
     private Money typeCash;// вид денег: рубли или доллары или евро!
 
-    Cell(Integer value, Integer countOfNote, Money typeCash){
+    public Cell(Integer value, Integer countOfNote, Money typeCash){
         if(value > 0 && countOfNote > 0) {
             nominal = value;
             this.countOfNote = countOfNote;// !! Ноль тоже учитывается!!

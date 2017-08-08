@@ -1,8 +1,8 @@
-package uteevbkru;
+package atm;
 
 
-import uteevbkru.Money.Dollar;
-import uteevbkru.Money.Ruble;
+import atm.Money.Dollar;
+import atm.Money.Ruble;
 
 import java.util.ArrayList;
 

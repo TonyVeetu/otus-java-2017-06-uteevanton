@@ -1,13 +1,13 @@
-package uteevbkru.Money;
+package atm.Money;
 
 /**
  * Created by anton on 28.07.17.
  */
-public class Evro extends Money {
+public class Dollar extends Money {
     private String name;
 
-    public Evro(){
-        name = "Evr";
+    public Dollar(){
+        name = "Dollar";
     }
 
     public String getName(){

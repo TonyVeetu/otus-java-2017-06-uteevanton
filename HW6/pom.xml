@@ -44,7 +44,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>uteevbkru.Main</mainClass>
+                            <mainClass>atm.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

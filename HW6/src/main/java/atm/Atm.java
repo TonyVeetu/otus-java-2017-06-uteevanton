@@ -1,14 +1,17 @@
-package uteevbkru;
+package atm;
 
-import uteevbkru.Money.Dollar;
-import uteevbkru.Money.Evro;
-import uteevbkru.Money.Money;
-import uteevbkru.Money.Ruble;
-import uteevbkru.Strategy.GreedyAlgorithm;
-import uteevbkru.Strategy.OptimAlgorithm;
-import uteevbkru.Strategy.WithdrawAlgorithm;
+import atm.Money.Evro;
+import atm.Strategy.GreedyAlgorithm;
+import atm.Money.Dollar;
+import atm.Money.Money;
+import atm.Money.Ruble;
+import atm.Strategy.OptimAlgorithm;
+import atm.Strategy.WithdrawAlgorithm;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by anton on 27.07.17.
@@ -19,14 +22,18 @@ public class Atm {
 
     private ArrayList<Cell> cells = new ArrayList<>(5);
     private WithdrawAlgorithm algorithm;
-    private boolean emptyCell;
+    private boolean isEmptyCell;
+    //TODO
+    private final String parol = "SuperJavaInOtus";
 
-    Atm(ArrayList<Cell> cells){
+    private Memento memento;
+
+    public Atm(ArrayList<Cell> cells){
         this.cells = cells;
-        //TODO sort
-        //Arrays.sort(cells);
         algorithm = new WithdrawAlgorithm(new GreedyAlgorithm(cells));
-        emptyCell = false;
+        isEmptyCell = false;
+
+        memento = new Memento();
     }
 
     /**
@@ -34,7 +41,7 @@ public class Atm {
      * @param typeMoney Рубли = 0, Долары = 1, Евро = 2
      * @return сумма денег
      */
-    int getResidue(Money typeMoney){
+    public int getResidue(Money typeMoney){
         int Symm = 0;
         for(int j = 0; j < cells.size(); j++){
                 Symm += cells.get(j).getCash(typeMoney);
@@ -51,6 +58,7 @@ public class Atm {
 
     // ____П О Л У Ч Е Н И Е_____
     boolean getCashInRub(int countCash){
+        // TODO убрать в Starategy!!!!
         if(countCash <= 0)
             return false;
 
@@ -88,7 +96,7 @@ public class Atm {
             return false;
         }
         // Если ячейка пустая, то нужно переключить алгоритм выдачи денег!
-        //Правильно ли это?????????
+        //Правильно ли реализована логика переключения алгоритма?????????
         checkEmtyCell();
         algorithm.getMoney(count);
         return true;
@@ -111,7 +119,7 @@ public class Atm {
             return true;
     }
 
-    void printState(){
+    public void printState(){
         System.out.println("\t" + "All money in ATM in rub = " + this.getResidue(new Ruble()));//TODO use static value
         System.out.println("\t" + "All money in ATM in $ = " + this.getResidue(new Dollar()));
         for(int i = 0; i < cells.size(); i++){
@@ -122,15 +130,50 @@ public class Atm {
     }
 
     private void checkEmtyCell(){
-        emptyCell = false;// На случай если алгоритм нужно переключить еще раз!!!
+        isEmptyCell = false;// На случай если алгоритм нужно переключить еще раз!!!
         for(int i = 0; i < cells.size(); i++) {
             if (cells.get(i).getIsEmpty()) {
-                emptyCell = true;
+                isEmptyCell = true;
             }
         }
-        if(emptyCell)
+        if(isEmptyCell)
             algorithm.setAlgorithm(new OptimAlgorithm(cells));
         else
             algorithm.setAlgorithm(new GreedyAlgorithm(cells));
     }
+
+    //Не нравиться что любой может вызвать recovery!!!!
+    //Что делать!
+    public void recovery(){
+        cells = memento.getSavedCells();
+        algorithm = memento.getSavedAlgorithm();
+        isEmptyCell = memento.getSavedIsEmptyCell();
+        // TODO где здесь должен быть caretaker    ????
+    }
+
+    private class Memento {
+        private ArrayList<Cell> saveCells;
+        private WithdrawAlgorithm saveAlgorithm;
+        private boolean saveIsEmptyCell;
+
+        public Memento(){
+            saveCells = cells;
+            saveAlgorithm = algorithm;
+            saveIsEmptyCell = isEmptyCell;
+        }
+
+        public ArrayList<Cell> getSavedCells(){
+            return saveCells;
+        }
+
+        public WithdrawAlgorithm getSavedAlgorithm(){
+            return saveAlgorithm;
+        }
+
+        public boolean getSavedIsEmptyCell(){
+            return saveIsEmptyCell;
+        }
+
+    }
+
 }

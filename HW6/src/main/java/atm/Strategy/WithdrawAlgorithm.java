@@ -1,4 +1,4 @@
-package uteevbkru.Strategy;
+package atm.Strategy;
 
 /**
  * Created by anton on 31.07.17.

@@ -1,4 +1,4 @@
-package uteevbkru.Money;
+package atm.Money;
 
 /**
  * Created by anton on 28.07.17.
