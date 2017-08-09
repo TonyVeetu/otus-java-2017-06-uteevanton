@@ -1,5 +1,7 @@
 package atm.Strategy;
 
+import atm.Money.Money;
+
 /**
  * Created by anton on 31.07.17.
  */
@@ -14,7 +16,11 @@ public class WithdrawAlgorithm {
         this.algorithm = algorithm;
     }
 
-    public boolean getMoney(int count){
-        return algorithm.giveMoney(count);
+//    public boolean getMoneyInRub(int count){
+//        return algorithm.giveMoneyInRub(count);
+//    }
+
+    public boolean getMoney(Money m){
+        return algorithm.giveMoney(m);
     }
 }
