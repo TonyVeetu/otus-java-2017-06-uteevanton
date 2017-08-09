@@ -34,22 +34,22 @@ public class Main {
 
         int count1 = 545;
         System.out.println("__****__I want to GIVE "+ count1 +" ruble!__***___");
-        atm.giveCashInRub(count1);
+        atm.giveCash(new Ruble(545));
         atm.printState();
 
         int count4 = 100;
         System.out.println("__****__I want to GIVE " + count4 + " ruble!__***___");
-        atm.giveCashInRub(count4);
+        atm.giveCash(new Ruble(count4));
         atm.printState();
 
         int count2 = 548;
         System.out.println("__****__I want to GET " + count2 + " ruble!__***___");
-        atm.getCashInRub(count2);
+        atm.getCash(new Ruble(count2));
         atm.printState();
 
         int count3 = 250;
         System.out.println("__****__I want to GIVE " + count3 + " ruble!__***___");
-        atm.giveCashInRub(count3);
+        atm.giveCash(new Ruble(count3));
         atm.printState();
     }
 

@@ -2,6 +2,7 @@ package atm.Strategy;
 
 import atm.Atm;
 import atm.Cell;
+import atm.Money.Money;
 
 import java.util.ArrayList;
 
@@ -15,16 +16,39 @@ public class OptimAlgorithm implements StrategyAlgorithm {
         this.cells = cells;
     }
 
-    public boolean giveMoney(int count){
+//    public boolean giveMoneyInRub(int count){
+//        // Этот алгоритм стараться выдавать все по разу и так в цикле!
+//        // Тем самым ячейки будут равномерно истрачены!!!
+//
+//        int Symm = count;
+//        int i = 4;
+//
+//        while(Symm != 0){
+//            if( (cells.get(i).typeCash()).equals(Atm.typeCash[0].getName())){//  Запрошенная валюта!
+//                if(Symm >= cells.get(i).getNominal() && !cells.get(i).getIsEmpty()){
+//                    if(cells.get(i).giveNote()){
+//                        Symm -= cells.get(i).getNominal();
+//                        System.out.println("Optim algorithm give: "+cells.get(i).getNominal());
+//                    }
+//                }
+//            }
+//            if(i == 0){
+//                i = 4;
+//            }
+//            i--;
+//        }
+//        return true;
+//    }
+
+    public boolean giveMoney(Money m){
         // Этот алгоритм стараться выдавать все по разу и так в цикле!
         // Тем самым ячейки будут равномерно истрачены!!!
 
-        int Symm = count;
+        int Symm = m.getCount();
         int i = 4;
-        //TODO выдавать ту валюту которую запросили!
 
         while(Symm != 0){
-            if( (cells.get(i).typeCash()).equals(Atm.typeCash[0].getName())){//  Запрошенная валюта!
+            if( (cells.get(i).typeCash()).equals(m.getName())){//  Запрошенная валюта!
                 if(Symm >= cells.get(i).getNominal() && !cells.get(i).getIsEmpty()){
                     if(cells.get(i).giveNote()){
                         Symm -= cells.get(i).getNominal();
@@ -39,4 +63,5 @@ public class OptimAlgorithm implements StrategyAlgorithm {
         }
         return true;
     }
+
 }

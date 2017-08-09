@@ -7,6 +7,7 @@ import java.util.ArrayList;
 /**
  * Created by anton on 08.08.17.
  */
+@Deprecated
 public class Memento {
     private ArrayList<Cell> saveCells;
     private WithdrawAlgorithm algorithm;
@@ -19,7 +20,6 @@ public class Memento {
     }
 
     public ArrayList<Cell> getState(){
-        //TODO
         return this.saveCells;
     }
 }

@@ -3,6 +3,7 @@ package department;
 import atm.Atm;
 import atm.Cell;
 import atm.Money.Dollar;
+import atm.Money.Money;
 import atm.Money.Ruble;
 
 import java.util.ArrayList;
@@ -44,6 +45,14 @@ public class Department {
         return Sym;
     }
 
+    public int countAllMoney(Money m){
+        int Sym = 0;
+        for(int i = 0; i < atms.size(); i++){
+            Sym += atms.get(i).getResidue(m);
+        }
+        return Sym;
+    }
+
     public void init(){
         Cell cell1 = new Cell(1, 10, new Ruble());
         Cell cell2 = new Cell(5, 10, new Ruble());
@@ -78,9 +87,23 @@ public class Department {
         this.addAtm(atm2);
     }
 
+    public void work(){
+        atms.get(0).giveCash(new Ruble(545));
+        atms.get(0).giveCash(new Dollar(20));
+
+        atms.get(1).giveCash(new Ruble(200));
+        atms.get(1).giveCash(new Dollar(5));
+    }
+
     public void printState(){
         for(int i = 0; i < atms.size(); i++) {
+            System.out.println("Atm in use: " + atms.get(i).getUniqueID());
             atms.get(i).printState();
         }
+    }
+
+    public void recoveryCells(){
+        for(int i = 0; i < atms.size(); i++)
+            atms.get(i).recovery("SuperJavaInOtus");
     }
 }
