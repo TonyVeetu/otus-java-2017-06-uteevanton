@@ -18,18 +18,26 @@ public class Atm {
     public static final Money[] typeCash = {new Ruble(), new Dollar(), new Evro()}; //TODO think должен ли я это use????
 
     private ArrayList<Cell> cells = new ArrayList<>(5);
+    private ArrayList<Cell> reservCells = new ArrayList<>(5);
     private WithdrawAlgorithm algorithm;
     private boolean isEmptyCell;
     private final String pass = "SuperJavaInOtus";
-    private final Memento memento;
+    private Memento2 memento;
     private final String uniqueID = UUID.randomUUID().toString();
 
     public Atm(ArrayList<Cell> cells){
         //TODO sort
         this.cells = cells;
+        reservCells.dd(new Cell(1, 2, new Dollar()));
+        reservCells.addAll(cells);
         algorithm = new WithdrawAlgorithm(new GreedyAlgorithm(cells));
         isEmptyCell = false;
-        memento = new Memento();// Удобно что это внутренний класс!
+
+        //TODO не работает!!
+        System.out.println("!!!!!!!!!!!!!!Create memento in atm " + getUniqueID());
+        memento = new Memento2(cells, algorithm, isEmptyCell);// Удобно что это внутренний класс!
+        //memento = new Memento2();// Удобно что это внутренний класс!
+        //memento.initArray(cells);
     }
 
     public String getUniqueID(){
@@ -172,6 +180,7 @@ public class Atm {
 
 
     public void printState(){
+        System.out.println((char) 27 + "[33mState atm and atm's cells: " + (char)27 + "[0m");
         System.out.println("\t" + "All money in ATM in rub = " + this.getResidue(new Ruble()));
         System.out.println("\t" + "All money in ATM in $ = " + this.getResidue(new Dollar()));
         for(int i = 0; i < cells.size(); i++){
@@ -201,7 +210,12 @@ public class Atm {
     public void recovery(String pass){
         if(pass.equals(this.pass)){
             System.out.println("Recovery is going for atm: " + getUniqueID());
-            cells = memento.getSavedCells();
+            cells.clear();
+            memento.printStateMemento();
+
+            //cells.addAll(memento.getSavedCells());
+            cells.addAll(reservCells);
+
             algorithm = memento.getSavedAlgorithm();
             isEmptyCell = memento.getSavedIsEmptyCell();
             //TODO где здесь должен быть caretaker    ????
@@ -212,38 +226,38 @@ public class Atm {
             System.out.println("Can not recovery atm " + getUniqueID());
     }
 
-    private class Memento {
-        private final ArrayList<Cell> saveCells;
-        private WithdrawAlgorithm saveAlgorithm;
-        private boolean saveIsEmptyCell;
-
-        Memento(){
-            saveCells = cells;
-            saveAlgorithm = algorithm;
-            saveIsEmptyCell = isEmptyCell;
-            printStateMemento();
-        }
-
-        public ArrayList<Cell> getSavedCells(){
-            return saveCells;
-        }
-
-        public WithdrawAlgorithm getSavedAlgorithm(){
-            return saveAlgorithm;
-        }
-
-        public boolean getSavedIsEmptyCell(){
-            return saveIsEmptyCell;
-        }
-
-        public void printStateMemento(){
-            System.out.println("Memento");
-            for(int i = 0; i < saveCells.size(); i++){
-                int[] mas = saveCells.get(i).getStateCell();
-                System.out.print("\t" + "Cell_"+ i + " - parOfNode: " + mas[0] + ", count: " + mas[1] + ", type cash - " + saveCells.get(i).typeCash() + ", isEmpty: " + mas[2] + ", isFull: " + mas[3]);
-                System.out.println();
-            }
-        }
-    }
+//    private class Memento {
+//        private final ArrayList<Cell> saveCells;
+//        private WithdrawAlgorithm saveAlgorithm;
+//        private boolean saveIsEmptyCell;
+//
+//        Memento(){
+//            saveCells = cells;
+//            saveAlgorithm = algorithm;
+//            saveIsEmptyCell = isEmptyCell;
+//            printStateMemento();
+//        }
+//
+//        public ArrayList<Cell> getSavedCells(){
+//            return saveCells;
+//        }
+//
+//        public WithdrawAlgorithm getSavedAlgorithm(){
+//            return saveAlgorithm;
+//        }
+//
+//        public boolean getSavedIsEmptyCell(){
+//            return saveIsEmptyCell;
+//        }
+//
+//        public void printStateMemento(){
+//            System.out.println("Memento2");
+//            for(int i = 0; i < saveCells.size(); i++){
+//                int[] mas = saveCells.get(i).getStateCell();
+//                System.out.print("\t" + "Cell_"+ i + " - parOfNode: " + mas[0] + ", count: " + mas[1] + ", type cash - " + saveCells.get(i).typeCash() + ", isEmpty: " + mas[2] + ", isFull: " + mas[3]);
+//                System.out.println();
+//            }
+//        }
+//    }
 
 }

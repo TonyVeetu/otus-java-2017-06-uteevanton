@@ -14,9 +14,9 @@ public class Main {
         System.out.println("Money in rub: " + dep.countAllMoneyInRub());
 
         dep.work();
-        dep.printState();
+        //dep.printState();
 
         dep.recoveryCells();
-        dep.printState();
+        //dep.printState();
     }
 }
