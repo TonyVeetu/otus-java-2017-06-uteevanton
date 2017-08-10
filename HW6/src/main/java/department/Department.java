@@ -13,29 +13,11 @@ import java.util.ArrayList;
  */
 public class Department {
 
-    private ArrayList<Atm> atms;
-
-    public Department(ArrayList<Atm> atms){
-        this.atms = atms;
-    }
+    private ArrayList<Atm> atms = new ArrayList<>();
 
     public Department(){
-        atms = new ArrayList<>();
-    }
 
-    public void addAtm(Atm a){
-        atms.add(a);
     }
-
-    public Atm getAtm(int a){
-        if(a <= atms.size())
-            return atms.get(a);
-        else {
-            new IndexOutOfBoundsException();
-            return null;
-        }
-    }
-
 
     public int countAllMoneyInRub(){
         int Sym = 0;
@@ -46,6 +28,7 @@ public class Department {
     }
 
     public int countAllMoney(Money m){
+        //TODO rub and dollar
         int Sym = 0;
         for(int i = 0; i < atms.size(); i++){
             Sym += atms.get(i).getResidue(m);
@@ -68,7 +51,7 @@ public class Department {
         cells.add(cell5);
         Atm atm1 = new Atm(cells);
 
-        this.addAtm(atm1);
+        atms.add(atm1);
 
         Cell cell11 = new Cell(5, 10, new Ruble());
         Cell cell12 = new Cell(10, 10, new Ruble());
@@ -84,7 +67,7 @@ public class Department {
         cells2.add(cell15);
 
         Atm atm2 = new Atm(cells2);
-        this.addAtm(atm2);
+        atms.add(atm2);
     }
 
     public void work(){

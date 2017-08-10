@@ -5,11 +5,10 @@ import atm.Strategy.GreedyAlgorithm;
 import atm.Money.Dollar;
 import atm.Money.Money;
 import atm.Money.Ruble;
-import atm.Strategy.OptimAlgorithm;
+import atm.Strategy.OptimaAlgorithm;
 import atm.Strategy.WithdrawAlgorithm;
 
 import java.util.*;
-import java.util.UUID.*;
 
 /**
  * Created by anton on 27.07.17.
@@ -17,8 +16,8 @@ import java.util.UUID.*;
 public class Atm {
     public static final Money[] typeCash = {new Ruble(), new Dollar(), new Evro()}; //TODO think должен ли я это use????
 
-    private ArrayList<Cell> cells = new ArrayList<>(5);
-    private ArrayList<Cell> reservCells = new ArrayList<>(5);
+    private ArrayList<Cell> cellsAtm = new ArrayList<>(5);
+    private ArrayList<Cell> reserveCells = new ArrayList<>(5);
     private WithdrawAlgorithm algorithm;
     private boolean isEmptyCell;
     private final String pass = "SuperJavaInOtus";
@@ -27,17 +26,17 @@ public class Atm {
 
     public Atm(ArrayList<Cell> cells){
         //TODO sort
-        this.cells = cells;
-        reservCells.dd(new Cell(1, 2, new Dollar()));
-        reservCells.addAll(cells);
-        algorithm = new WithdrawAlgorithm(new GreedyAlgorithm(cells));
+        cellsAtm.addAll(cells);
+        reserveCells.add(new Cell(1, 2, new Dollar()));
+        reserveCells.addAll(cells);
+        algorithm = new WithdrawAlgorithm(new GreedyAlgorithm());
         isEmptyCell = false;
 
-        //TODO не работает!!
+        //TODO не работает memento!!
         System.out.println("!!!!!!!!!!!!!!Create memento in atm " + getUniqueID());
-        memento = new Memento2(cells, algorithm, isEmptyCell);// Удобно что это внутренний класс!
+        memento = new Memento2(this.cellsAtm, algorithm, isEmptyCell);// Удобно что это внутренний класс!
         //memento = new Memento2();// Удобно что это внутренний класс!
-        //memento.initArray(cells);
+        //memento.initArray(cellsAtm);
     }
 
     public String getUniqueID(){
@@ -46,8 +45,8 @@ public class Atm {
 
     public int getResidue(Money typeMoney){
         int Symm = 0;
-        for(int j = 0; j < cells.size(); j++){
-                Symm += cells.get(j).getCash(typeMoney);
+        for(int j = 0; j < cellsAtm.size(); j++){
+                Symm += cellsAtm.get(j).getCash(typeMoney);
         }
         return Symm;
     }
@@ -56,35 +55,6 @@ public class Atm {
      * Пользователь хочет дать деньги вызывая этот метод!!
      * И ячейка может быть переполненой isFull
      */
-
-    // ____П О Л У Ч Е Н И Е_____
-//    boolean getCashInRub(int countCash){
-//        if(countCash <= 0)
-//            return false;
-//
-//        int Symm = countCash;
-//        int i = 4;
-//
-//        while(Symm != 0){
-//            if( (cells.get(i).typeCash()).equals(typeCash[0].getName())){
-//                if(Symm >= cells.get(i).getNominal() && !cells.get(i).getIsFull()){
-//                    if(cells.get(i).getNote()){
-//                        Symm -= cells.get(i).getNominal();
-//                        //System.out.println("get: "+cells.get(i).getNominal());
-//                    }
-//                }
-//                if(Symm >= cells.get(i).getNominal() && !cells.get(i).getIsFull()){
-//                    i++;
-//                }
-//            }
-//            if(i == 0){
-//                i = 4;
-//            }
-//            i--;
-//        }
-//        return true;
-//    }
-
     boolean getCash(Money m){
         // TODO есть два метода get/giveCash которые очень похожи!!
         //Вопрос, неявляется ли это антипаттерном??
@@ -96,14 +66,14 @@ public class Atm {
         int i = 4;
 
         while(Symm != 0){
-            if( (cells.get(i).typeCash()).equals(m.getName())){
-                if(Symm >= cells.get(i).getNominal() && !cells.get(i).getIsFull()){
-                    if(cells.get(i).getNote()){
-                        Symm -= cells.get(i).getNominal();
-                        //System.out.println("get: "+cells.get(i).getNominal());
+            if( (cellsAtm.get(i).typeCash()).equals(m.getName())){
+                if(Symm >= cellsAtm.get(i).getNominal() && !cellsAtm.get(i).getIsFull()){
+                    if(cellsAtm.get(i).getNote()){
+                        Symm -= cellsAtm.get(i).getNominal();
+                        //System.out.println("get: "+cellsAtm.get(i).getNominal());
                     }
                 }
-                if(Symm >= cells.get(i).getNominal() && !cells.get(i).getIsFull()){
+                if(Symm >= cellsAtm.get(i).getNominal() && !cellsAtm.get(i).getIsFull()){
                     i++;
                 }
             }
@@ -118,18 +88,6 @@ public class Atm {
     /**
      * Пользователь получает деньги вызывая этот метод!!
      */
-    // ______В Ы Д А Ч А____
-//    boolean giveCashInRub( int count){
-//        if( !checkMoneyInRub(count)){
-//            return false;
-//        }
-//        // Если ячейка пустая, то нужно переключить алгоритм выдачи денег!
-//        //Правильно ли реализована логика переключения алгоритма?????????
-//        //TODO
-//        checkEmptyCell();
-//        algorithm.getMoney(count);
-//        return true;
-//    }
 
     public boolean giveCash( Money m){
         if( !checkMoney(m)){
@@ -139,27 +97,9 @@ public class Atm {
         // Если ячейка пустая, то нужно переключить алгоритм выдачи денег!
         //TODO think!!//Правильно ли реализована логика переключения алгоритма?????????
         checkEmptyCell();
-        algorithm.getMoney(m);
+        algorithm.giveMoney(m, cellsAtm);
         return true;
     }
-
-
-//    private boolean checkMoneyInRub(int count){
-//        if(count < 0) {
-//            System.out.println("Error!!! It's impossible: " + count + " rub");
-//            return false;
-//        }
-//        int Symm = 0;
-//        for(int i = 0; i < cells.size(); i++){
-//            Symm += cells.get(i).getCash(typeCash[0]);
-//        }
-//        if(count > Symm) {
-//            System.out.println("Error!!! You want to much money!");
-//            return false;
-//        }
-//        else
-//            return true;
-//    }
 
     private boolean checkMoney(Money m){
         if(m.getCount() < 0) {
@@ -167,8 +107,8 @@ public class Atm {
             return false;
         }
         int Symm = 0;
-        for(int i = 0; i < cells.size(); i++){
-            Symm += cells.get(i).getCash(m);
+        for(int i = 0; i < cellsAtm.size(); i++){
+            Symm += cellsAtm.get(i).getCash(m);
         }
         if(m.getCount() > Symm) {
             System.out.println("********__Error!!! You want to much money: " + m.getCount() + " " + m.getName() + "___*****");
@@ -180,27 +120,28 @@ public class Atm {
 
 
     public void printState(){
-        System.out.println((char) 27 + "[33mState atm and atm's cells: " + (char)27 + "[0m");
+        System.out.println((char) 27 + "[33mState atm and atm's cellsAtm: " + (char)27 + "[0m");
         System.out.println("\t" + "All money in ATM in rub = " + this.getResidue(new Ruble()));
         System.out.println("\t" + "All money in ATM in $ = " + this.getResidue(new Dollar()));
-        for(int i = 0; i < cells.size(); i++){
-            int[] mas = cells.get(i).getStateCell();
-            System.out.print("\t" + "Cell_"+ i + " - parOfNode: " + mas[0] + ", count: " + mas[1] + ", type cash - " + cells.get(i).typeCash() + ", isEmpty: " + mas[2] + ", isFull: " + mas[3]);
+        for(int i = 0; i < cellsAtm.size(); i++){
+            int[] mas = cellsAtm.get(i).getStateCell();
+            System.out.print("\t" + "Cell_"+ i + " - parOfNode: " + mas[0] + ", count: " + mas[1] + ", type cash - " + cellsAtm.get(i).typeCash() + ", isEmpty: " + mas[2] + ", isFull: " + mas[3]);
             System.out.println();
         }
     }
 
+    //TODO  нужно ли тут new???????
     private void checkEmptyCell(){
         isEmptyCell = false;// На случай если алгоритм нужно переключить еще раз!!!
-        for(int i = 0; i < cells.size(); i++) {
-            if (cells.get(i).getIsEmpty()) {
+        for(int i = 0; i < cellsAtm.size(); i++) {
+            if (cellsAtm.get(i).getIsEmpty()) {
                 isEmptyCell = true;//Будет true только если есть пустой Cell
             }
         }
         if(isEmptyCell)//Если есть пустой Cell, то нужно переключить алгоритм!!
-            algorithm.setAlgorithm(new OptimAlgorithm(cells));
+            algorithm.setAlgorithm(new OptimaAlgorithm());
         else
-            algorithm.setAlgorithm(new GreedyAlgorithm(cells));
+            algorithm.setAlgorithm(new GreedyAlgorithm());
     }
 
     //Не нравиться то, что любой может вызвать recovery!!!!
@@ -210,11 +151,11 @@ public class Atm {
     public void recovery(String pass){
         if(pass.equals(this.pass)){
             System.out.println("Recovery is going for atm: " + getUniqueID());
-            cells.clear();
+            cellsAtm.clear();
             memento.printStateMemento();
 
-            //cells.addAll(memento.getSavedCells());
-            cells.addAll(reservCells);
+            //cellsAtm.addAll(memento.getSavedCells());
+            cellsAtm.addAll(reserveCells);
 
             algorithm = memento.getSavedAlgorithm();
             isEmptyCell = memento.getSavedIsEmptyCell();
@@ -225,39 +166,5 @@ public class Atm {
         else
             System.out.println("Can not recovery atm " + getUniqueID());
     }
-
-//    private class Memento {
-//        private final ArrayList<Cell> saveCells;
-//        private WithdrawAlgorithm saveAlgorithm;
-//        private boolean saveIsEmptyCell;
-//
-//        Memento(){
-//            saveCells = cells;
-//            saveAlgorithm = algorithm;
-//            saveIsEmptyCell = isEmptyCell;
-//            printStateMemento();
-//        }
-//
-//        public ArrayList<Cell> getSavedCells(){
-//            return saveCells;
-//        }
-//
-//        public WithdrawAlgorithm getSavedAlgorithm(){
-//            return saveAlgorithm;
-//        }
-//
-//        public boolean getSavedIsEmptyCell(){
-//            return saveIsEmptyCell;
-//        }
-//
-//        public void printStateMemento(){
-//            System.out.println("Memento2");
-//            for(int i = 0; i < saveCells.size(); i++){
-//                int[] mas = saveCells.get(i).getStateCell();
-//                System.out.print("\t" + "Cell_"+ i + " - parOfNode: " + mas[0] + ", count: " + mas[1] + ", type cash - " + saveCells.get(i).typeCash() + ", isEmpty: " + mas[2] + ", isFull: " + mas[3]);
-//                System.out.println();
-//            }
-//        }
-//    }
 
 }

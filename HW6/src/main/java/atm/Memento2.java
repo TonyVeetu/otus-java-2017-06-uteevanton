@@ -14,7 +14,6 @@ public class Memento2 {
     private boolean saveIsEmptyCell = false;
 
     Memento2(ArrayList<Cell> cells, WithdrawAlgorithm algrorithm, boolean isEmptyCell){
-        //System.out.println("MEMENTO!!!!!!!!!");
         saveCells.addAll(cells);
         saveAlgorithm = algrorithm;
         saveIsEmptyCell = isEmptyCell;
