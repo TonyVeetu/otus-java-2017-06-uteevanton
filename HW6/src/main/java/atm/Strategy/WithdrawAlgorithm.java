@@ -19,6 +19,10 @@ public class WithdrawAlgorithm {
         this.algorithm = algorithm;
     }
 
+    public String getName(){
+        return algorithm.getName();
+    }
+
     public boolean giveMoney(Money m, ArrayList<Cell> cells){
         return algorithm.giveMoney(m, cells);
     }

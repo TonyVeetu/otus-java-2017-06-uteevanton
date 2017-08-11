@@ -11,6 +11,7 @@ import java.util.ArrayList;
  * Created by anton on 31.07.17.
  */
 public class GreedyAlgorithm  implements StrategyAlgorithm {
+    private final String nameAlg = "Greedy";
 
     public GreedyAlgorithm(){
 
@@ -39,4 +40,6 @@ public class GreedyAlgorithm  implements StrategyAlgorithm {
         }
         return true;
     }
+
+    public String getName(){return nameAlg;}
 }

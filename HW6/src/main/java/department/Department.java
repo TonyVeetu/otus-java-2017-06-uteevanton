@@ -27,8 +27,7 @@ public class Department {
         return Sym;
     }
 
-    public int countAllMoney(Money m){
-        //TODO rub and dollar
+    public int countMoney(Money m){
         int Sym = 0;
         for(int i = 0; i < atms.size(); i++){
             Sym += atms.get(i).getResidue(m);

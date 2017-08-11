@@ -11,6 +11,7 @@ import java.util.ArrayList;
  * Created by anton on 31.07.17.
  */
 public class OptimaAlgorithm implements StrategyAlgorithm {
+    private final String nameAlg = "Optima";
 
     public OptimaAlgorithm(){
     }
@@ -38,5 +39,7 @@ public class OptimaAlgorithm implements StrategyAlgorithm {
         }
         return true;
     }
+
+    public String getName(){return nameAlg;}
 
 }

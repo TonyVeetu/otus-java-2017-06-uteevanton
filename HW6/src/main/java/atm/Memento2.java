@@ -1,5 +1,6 @@
 package atm;
 
+import atm.Strategy.GreedyAlgorithm;
 import atm.Strategy.StrategyAlgorithm;
 import atm.Strategy.WithdrawAlgorithm;
 
@@ -10,12 +11,15 @@ import java.util.ArrayList;
  */
 public class Memento2 {
     private ArrayList<Cell> saveCells = new ArrayList<>();
-    private WithdrawAlgorithm saveAlgorithm = null;
+    private WithdrawAlgorithm saveAlgorithm = new WithdrawAlgorithm(new GreedyAlgorithm());
     private boolean saveIsEmptyCell = false;
 
-    Memento2(ArrayList<Cell> cells, WithdrawAlgorithm algrorithm, boolean isEmptyCell){
-        saveCells.addAll(cells);
-        saveAlgorithm = algrorithm;
+    Memento2(ArrayList<Cell> cells, WithdrawAlgorithm algorithm, boolean isEmptyCell){
+        // Чтобы избежать копирования ссылки!!
+        for(Cell cell : cells) {
+            saveCells.add(new Cell(cell));
+        }
+        saveAlgorithm = algorithm;
         saveIsEmptyCell = isEmptyCell;
         printStateMemento();
     }
@@ -39,5 +43,6 @@ public class Memento2 {
             System.out.print("\t" + "Cell_"+ i + " - parOfNode: " + mas[0] + ", count: " + mas[1] + ", type cash - " + saveCells.get(i).typeCash() + ", isEmpty: " + mas[2] + ", isFull: " + mas[3]);
             System.out.println();
         }
+        System.out.println("\t" + "Algorithm: " + saveAlgorithm.getName());
     }
 }

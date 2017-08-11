@@ -30,6 +30,22 @@ public class Cell {
         }
     }
 
+    public Cell(Cell cell){
+        nominal = cell.getNominal();
+        countOfNote = cell.getCountOfNote();
+        typeCash = cell.getTypeCash();
+        isEmpty = cell.getIsEmpty();
+        isFull = getIsFull();
+    }
+
+    public int getNominal(){
+        return nominal;
+    }
+
+    public int getCountOfNote(){return countOfNote;}
+
+    public Money getTypeCash(){return typeCash;}
+
     /**
      * @param typeCash тип валюты
      * @return
@@ -41,10 +57,6 @@ public class Cell {
         return 0;
     }
 
-    public int getNominal(){
-        return nominal;
-    }
-
     /**
      * Я хочу иметь возможность запрещать использовать какую-то ячейку!
      * @return
@@ -52,7 +64,6 @@ public class Cell {
     private void increaseCountOfNote(){
         if(countOfNote < MAX_COUNT_NOTE){
             countOfNote++;
-            //!!!смешно!!!
             if (countOfNote > MIN_COUNT_NOTE)
                 isEmpty = false;
         }
@@ -63,15 +74,12 @@ public class Cell {
     private void reduceCountOfNote(){
         if(countOfNote > MIN_COUNT_NOTE){
             countOfNote--;
-            //!!!смешно!!!
             if(countOfNote < MAX_COUNT_NOTE)
                 isFull = false;
         }
         else {
             isEmpty = true;
         }
-
-        //TODO change algorithm!!!!!
     }
 
     public boolean giveNote(){
@@ -111,14 +119,6 @@ public class Cell {
             mas[1] = countOfNote;
             mas[2] = isEmpty ? 1 : 0;
             mas[3] = isFull ? 1 : 0;
-
-            //TODO  сделать красиво!!!
-//            if(typeCash.getName().equals(new Ruble().getName()))
-//                mas[4] = 0;
-//            if(typeCash.getName().equals(new Dollar().getName()))
-//                mas[4] = 1;
-//            if(typeCash.getName().equals(new Evro().getName()))
-//                mas[4] = 2;
             return mas;
     }
 

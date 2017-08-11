@@ -17,7 +17,6 @@ public class Atm {
     public static final Money[] typeCash = {new Ruble(), new Dollar(), new Evro()}; //TODO think должен ли я это use????
 
     private ArrayList<Cell> cellsAtm = new ArrayList<>(5);
-    private ArrayList<Cell> reserveCells = new ArrayList<>(5);
     private WithdrawAlgorithm algorithm;
     private boolean isEmptyCell;
     private final String pass = "SuperJavaInOtus";
@@ -25,28 +24,20 @@ public class Atm {
     private final String uniqueID = UUID.randomUUID().toString();
 
     public Atm(ArrayList<Cell> cells){
-        //TODO sort
         cellsAtm.addAll(cells);
-        reserveCells.add(new Cell(1, 2, new Dollar()));
-        reserveCells.addAll(cells);
         algorithm = new WithdrawAlgorithm(new GreedyAlgorithm());
         isEmptyCell = false;
-
-        //TODO не работает memento!!
-        System.out.println("!!!!!!!!!!!!!!Create memento in atm " + getUniqueID());
         memento = new Memento2(this.cellsAtm, algorithm, isEmptyCell);// Удобно что это внутренний класс!
-        //memento = new Memento2();// Удобно что это внутренний класс!
-        //memento.initArray(cellsAtm);
     }
 
     public String getUniqueID(){
         return uniqueID;
     }
 
-    public int getResidue(Money typeMoney){
+    public int getResidue(Money money){
         int Symm = 0;
         for(int j = 0; j < cellsAtm.size(); j++){
-                Symm += cellsAtm.get(j).getCash(typeMoney);
+            Symm += cellsAtm.get(j).getCash(money);
         }
         return Symm;
     }
@@ -130,7 +121,6 @@ public class Atm {
         }
     }
 
-    //TODO  нужно ли тут new???????
     private void checkEmptyCell(){
         isEmptyCell = false;// На случай если алгоритм нужно переключить еще раз!!!
         for(int i = 0; i < cellsAtm.size(); i++) {
@@ -144,19 +134,18 @@ public class Atm {
             algorithm.setAlgorithm(new GreedyAlgorithm());
     }
 
+
     //Не нравиться то, что любой может вызвать recovery!!!!
     //Что делать?
     //Хотелось бы какую-то защиту от злоумыщленников! Ничего кроме простого пароля на ум не приходит!!
     //Или не париться??
+    //TODO что делать??
     public void recovery(String pass){
         if(pass.equals(this.pass)){
             System.out.println("Recovery is going for atm: " + getUniqueID());
             cellsAtm.clear();
-            memento.printStateMemento();
-
-            //cellsAtm.addAll(memento.getSavedCells());
-            cellsAtm.addAll(reserveCells);
-
+            //memento.printStateMemento();
+            cellsAtm.addAll(memento.getSavedCells());
             algorithm = memento.getSavedAlgorithm();
             isEmptyCell = memento.getSavedIsEmptyCell();
             //TODO где здесь должен быть caretaker    ????
