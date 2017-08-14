@@ -43,7 +43,6 @@ public class Department {
         Cell cell5 = new Cell(50, 10, new Ruble());
 
 
-        git
         ArrayList<Cell> cells = new ArrayList<>(5);
         cells.add(cell1);
         cells.add(cell2);
