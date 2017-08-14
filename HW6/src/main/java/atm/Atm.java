@@ -46,16 +46,20 @@ public class Atm {
      * Пользователь хочет дать деньги вызывая этот метод!!
      * И ячейка может быть переполненой isFull
      */
-    boolean getCash(Money m){
+    public boolean getCash(Money m){
         // TODO есть два метода get/giveCash которые очень похожи!!
         //Вопрос, неявляется ли это антипаттерном??
         //Можно ли этого избежать??
         if(m.getCount() <= 0)
             return false;
 
+        if(!checkFreePlaceInCells(m)) {
+            System.out.println("Atm "+ getUniqueID() + " don't have enough space. You want to get: " + m.getCount());
+            return false;
+        }
+
         int Symm = m.getCount();
         int i = 4;
-
         while(Symm != 0){
             if( (cellsAtm.get(i).typeCash()).equals(m.getName())){
                 if(Symm >= cellsAtm.get(i).getNominal() && !cellsAtm.get(i).getIsFull()){
@@ -76,12 +80,28 @@ public class Atm {
         return true;
     }
 
+    /**Проверяет достаточно ли места в банкомате, чтобы положить в него деньги!
+     *
+     * @param m
+     * @return
+     */
+    private boolean checkFreePlaceInCells(Money m){
+        int maxSym = 0;
+        for(Cell cell : cellsAtm) {
+            if(cell.getTypeCash().equals(m.getName())){
+                maxSym += (Cell.MAX_COUNT_NOTE - cell.getCountOfNote())*cell.getNominal();
+            }
+        }
+        if(maxSym < m.getCount())
+            return false;
+        return true;
+    }
     /**
      * Пользователь получает деньги вызывая этот метод!!
      */
 
     public boolean giveCash( Money m){
-        if( !checkMoney(m)){
+        if( !checkBalance(m)){
             return false;
         }
         System.out.println("__****__I want to GIVE " + m.getCount() + m.getName() + "!__***___");
@@ -92,7 +112,8 @@ public class Atm {
         return true;
     }
 
-    private boolean checkMoney(Money m){
+    // Проверяет достаточно ли денег в банкомате!
+    private boolean checkBalance(Money m){
         if(m.getCount() < 0) {
             System.out.println("Error!!! It's impossible: " + m.getCount() + " " + m.getName());
             return false;

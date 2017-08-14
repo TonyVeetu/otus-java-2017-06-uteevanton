@@ -21,7 +21,6 @@ public class Memento2 {
         }
         saveAlgorithm = algorithm;
         saveIsEmptyCell = isEmptyCell;
-        printStateMemento();
     }
 
     public ArrayList<Cell> getSavedCells(){

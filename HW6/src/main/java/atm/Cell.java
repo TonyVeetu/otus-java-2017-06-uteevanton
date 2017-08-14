@@ -6,20 +6,20 @@ import atm.Money.Money;
  * Created by anton on 27.07.17.
  */
 public class Cell {
-    private static final int MAX_COUNT_NOTE = 20;
-    private static final int MIN_COUNT_NOTE = 0;
+    public static final int MAX_COUNT_NOTE = 20;
+    public static final int MIN_COUNT_NOTE = 0;
 
     private boolean isEmpty;//При true ячейка пустая и выдать деньги не может!
     private boolean isFull;//При true ячейка переполнена и положить в нее деньги нельзя!
     private int nominal;// номинал купюры
     private int countOfNote = 1;// количество купюр
-    private Money typeCash;// вид денег: рубли или доллары или евро!
+    private Money m;// вид денег: рубли или доллары или евро!
 
-    public Cell(Integer value, Integer countOfNote, Money typeCash){
+    public Cell(Integer value, Integer countOfNote, Money m){
         if(value > 0 && countOfNote > 0) {
             nominal = value;
             this.countOfNote = countOfNote;// !! Ноль тоже учитывается!!
-            this.typeCash = typeCash;
+            this.m = m;
             isEmpty = false;
             isFull = false;
         }
@@ -33,7 +33,7 @@ public class Cell {
     public Cell(Cell cell){
         nominal = cell.getNominal();
         countOfNote = cell.getCountOfNote();
-        typeCash = cell.getTypeCash();
+        m = cell.getM();
         isEmpty = cell.getIsEmpty();
         isFull = getIsFull();
     }
@@ -44,14 +44,16 @@ public class Cell {
 
     public int getCountOfNote(){return countOfNote;}
 
-    public Money getTypeCash(){return typeCash;}
+    public Money getM(){return m;}
+
+    public String getTypeCash(){return m.getName();}
 
     /**
      * @param typeCash тип валюты
      * @return
      */
     int getCash(Money typeCash){
-        if((this.typeCash.getName()).equals(typeCash.getName())){
+        if((this.m.getName()).equals(typeCash.getName())){
             return nominal *countOfNote;
         }
         return 0;
@@ -101,7 +103,7 @@ public class Cell {
     }
 
     public String typeCash(){
-        return typeCash.getName();
+        return m.getName();
     }
 
     /**

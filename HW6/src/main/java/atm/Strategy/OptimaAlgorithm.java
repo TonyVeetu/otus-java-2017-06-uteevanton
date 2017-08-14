@@ -28,7 +28,7 @@ public class OptimaAlgorithm implements StrategyAlgorithm {
                 if(Symm >= cellsOptima.get(i).getNominal() && !cellsOptima.get(i).getIsEmpty()){
                     if(cellsOptima.get(i).giveNote()){
                         Symm -= cellsOptima.get(i).getNominal();
-                        System.out.println("Optima algorithm give: "+cellsOptima.get(i).getNominal());
+                        //System.out.println("Optima algorithm give: "+cellsOptima.get(i).getNominal());
                     }
                 }
             }

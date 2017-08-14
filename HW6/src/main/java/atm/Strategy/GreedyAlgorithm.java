@@ -26,7 +26,7 @@ public class GreedyAlgorithm  implements StrategyAlgorithm {
                 if(Symm >= cellsGreed.get(i).getNominal() && !cellsGreed.get(i).getIsEmpty()){
                     if(cellsGreed.get(i).giveNote()){
                         Symm -= cellsGreed.get(i).getNominal();
-                        System.out.println("Greedy algorithm give: "+cellsGreed.get(i).getNominal());
+                        //System.out.println("Greedy algorithm give: "+cellsGreed.get(i).getNominal());
                     }
                 }
                 if(Symm >= cellsGreed.get(i).getNominal() && !cellsGreed.get(i).getIsEmpty()){
