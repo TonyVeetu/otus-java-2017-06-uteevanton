@@ -14,7 +14,7 @@ public class Main {
         /**_____My_part_programm______*/
 
         //TODO нужно ли проверять существование такого обьекта в BD??
-        UsersDataSet user1 = new UsersDataSet(4, "Sergey", 21);
+        UsersDataSet user1 = new UsersDataSet(4, "Sergei", 21);
         LoadSaveExecutor.save(user1, UsersDataSet.class);
 
         UsersDataSet user2 = LoadSaveExecutor.load(3, UsersDataSet.class);

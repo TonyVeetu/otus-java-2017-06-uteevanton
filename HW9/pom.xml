@@ -27,11 +27,6 @@
             <version>9.4-1200-jdbc41</version>
         </dependency>
         <dependency>
-            <groupId>javax.persistence</groupId>
-            <artifactId>persistence-api</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.0-api</artifactId>
             <version>1.0.1.Final</version>
@@ -59,7 +54,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>uteevbkru.Main</mainClass>
+                            <mainClass>uteevbkru.Main </mainClass>
                         </manifest>
                     </archive>
                 </configuration>
