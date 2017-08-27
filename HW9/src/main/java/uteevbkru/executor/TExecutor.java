@@ -23,4 +23,11 @@ public class TExecutor extends SimpleExecutor {
         }
     }
 
+    public int execUpdate(String update) throws SQLException {
+        try (Statement stmt = connection.createStatement()) {
+            stmt.execute(update);
+            return stmt.getUpdateCount();
+        }
+    }
+
 }

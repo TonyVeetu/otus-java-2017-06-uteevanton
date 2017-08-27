@@ -21,11 +21,6 @@ public class UsersDataSet extends DataSet {
         this.age = age;
     }
 
-    public UsersDataSet(long id, String name){
-        super(id);
-        this.name = name;
-    }
-
     public String getName(){return name;}
 
     public int getAge(){return age;};
