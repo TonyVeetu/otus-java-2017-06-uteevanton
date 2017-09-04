@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Admin</title>
+</head>
+<body>
+<div class="top">
+    <img src="admin_cat.jpeg"/>
+    <br/>
+    <a href="login">Login</a> <a href="admin">Admin</a> <a href="timer">Timer</a>
+</div>
+<div class="adm_login">
+    <form action="/admin" method="GET">
+        login: <input type="text" name="adm_login"/>
+        password: <input type="text" name="password"/>
+        <input type="submit" value="ok">
+    </form>
+</div>
+
+<p>Login: ${login}</p>
+
+<p>Method: ${method}</p>
+
+<p>URL: ${URL}</p>
+
+<p>Locale: ${locale}</p>
+
+<p>SessionId: ${sessionId}</p>
+
+<p>Parameters: ${parameters}</p>
+
+</body>
+</html>
