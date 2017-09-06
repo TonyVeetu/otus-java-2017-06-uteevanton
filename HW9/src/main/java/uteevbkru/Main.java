@@ -28,7 +28,9 @@ public class Main {
         //+//4. Маппинг имения поля к имени столбца таблицы задается через аннотацию! - Мне это пока не требуется use!
         //-//5. Не подлючил log4 в проект!
 
-        TableHelper.getNameUser();
+        TableHelper table = new TableHelper(UsersDataSet.class);
+        System.out.println("main: "+table.getAgeUser());
+        System.out.println("main: "+table.getNameUser());
      }
 
 
