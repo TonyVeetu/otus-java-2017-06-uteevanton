@@ -28,10 +28,6 @@ public class DBServiceImpl implements DBService {
         }
         catch (SQLException e){
             e.printStackTrace();
-            //TODO logirovat use log4!!!
-        }
-        catch (NullPointerException e){
-            e.printStackTrace();
         }
     }
 
@@ -42,10 +38,6 @@ public class DBServiceImpl implements DBService {
             user = dao.load(id, helper.getTableName());
         }
         catch (SQLException e){
-            e.printStackTrace();
-            //TODO logirovat use log4!!!
-        }
-        catch (NullPointerException e){
             e.printStackTrace();
         }
         return user;
@@ -60,7 +52,6 @@ public class DBServiceImpl implements DBService {
 
         private UsersDataSet load(long id, String table) throws SQLException {
             return exec.execQuery("SELECT * FROM "+ table + " WHERE id=" + id, result -> {
-                //TODO не получается сделать проверку на NULL use if(result.next()){...}!!!
                 result.next();
                 return new UsersDataSet(result.getLong(1), result.getString(2), result.getInt(3));
 
@@ -69,6 +60,8 @@ public class DBServiceImpl implements DBService {
 
         private int save(UsersDataSet user, String table) throws SQLException {
             System.out.println("UserDAO:save - " + "insert into users_hw9 (user_name) values (" + user.getId() + ",'" + user.getName() + "'," + user.getAge() + " )");
+            //TODO getName
+            //TODO getAge
             return exec.execUpdate("INSERT INTO " + table + " VALUES (" + user.getId() + ",'" + user.getName() + "'," + user.getAge() + " )");
         }
     }

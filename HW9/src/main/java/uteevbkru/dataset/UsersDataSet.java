@@ -25,7 +25,10 @@ public class UsersDataSet extends DataSet {
 
     public int getAge(){return age;};
 
-    public String getDescription(){
-        return "Id: " + this.getId() + ", name:" + this.getName() + ", age: " + this.getAge();
+    @Override
+    public String toString(){
+        return "Id: " + this.getId() +
+                ", name:" + this.getName() +
+                ", age: " + this.getAge();
     }
 }
