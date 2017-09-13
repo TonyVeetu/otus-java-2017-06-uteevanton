@@ -1,7 +1,5 @@
 package uteevbkru.dataset;
 
-import uteevbkru.dataset.DataSet;
-
 import javax.persistence.*;
 
 /**
@@ -15,8 +13,10 @@ public class UsersDataSet extends DataSet {
     @Column(name = "users_hw9_age", nullable = false, updatable = true)
     private int age = 0;
 
-    public UsersDataSet(long id, String name, int age){
-        super(id);
+    public UsersDataSet(){
+    }
+
+    public UsersDataSet(String name, int age){
         this.name = name;
         this.age = age;
     }

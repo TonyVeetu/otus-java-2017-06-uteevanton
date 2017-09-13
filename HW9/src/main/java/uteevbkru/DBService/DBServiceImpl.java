@@ -1,5 +1,7 @@
 package uteevbkru.DBService;
 
+import uteevbkru.dataset.DataSet;
+import uteevbkru.dataset.UsersDAO;
 import uteevbkru.dataset.UsersDataSet;
 import uteevbkru.executor.TExecutor;
 import uteevbkru.main.TableHelper;
@@ -13,18 +15,16 @@ import java.sql.SQLException;
 public class DBServiceImpl implements DBService {
     private UsersDAO dao;
     private Connection connection;
-    private  TableHelper helper;
 
-    public DBServiceImpl(Connection connection, Class clazz){
+    public DBServiceImpl(Connection connection){
         this.connection = connection;
-        helper = new TableHelper(clazz);
-        dao = new UsersDAO();
+        dao = new UsersDAO(connection);
     }
 
     @Override
     public void save(UsersDataSet user){
         try {
-            dao.save(user, helper.getTableName());
+            dao.save(user);
         }
         catch (SQLException e){
             e.printStackTrace();
@@ -32,10 +32,11 @@ public class DBServiceImpl implements DBService {
     }
 
     @Override
-    public UsersDataSet load(long id){
+    public UsersDataSet load(Long id){
         UsersDataSet user = null;
+
         try {
-            user = dao.load(id, helper.getTableName());
+            user = dao.load(id, UsersDataSet.class);
         }
         catch (SQLException e){
             e.printStackTrace();
@@ -43,26 +44,4 @@ public class DBServiceImpl implements DBService {
         return user;
     }
 
-    private class UsersDAO {
-        private TExecutor exec;
-
-        private UsersDAO(){
-            exec = new TExecutor(connection);
-        }
-
-        private UsersDataSet load(long id, String table) throws SQLException {
-            return exec.execQuery("SELECT * FROM "+ table + " WHERE id=" + id, result -> {
-                result.next();
-                return new UsersDataSet(result.getLong(1), result.getString(2), result.getInt(3));
-
-            });
-        }
-
-        private int save(UsersDataSet user, String table) throws SQLException {
-            System.out.println("UserDAO:save - " + "insert into users_hw9 (user_name) values (" + user.getId() + ",'" + user.getName() + "'," + user.getAge() + " )");
-            //TODO getName
-            //TODO getAge
-            return exec.execUpdate("INSERT INTO " + table + " VALUES (" + user.getId() + ",'" + user.getName() + "'," + user.getAge() + " )");
-        }
-    }
 }

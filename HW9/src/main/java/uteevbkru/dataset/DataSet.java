@@ -1,8 +1,6 @@
 package uteevbkru.dataset;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 
 /**
  * Created by anton on 18.08.17.
@@ -10,17 +8,15 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public abstract class DataSet {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    public DataSet(long id){
-        this.id = id;
-    }
 
     public long getId(){
         return id;
     }
-
     public void setId(long id){
-        this.id = id;
+        if(id >= 0)
+            this.id = id;
     }
+
 }
