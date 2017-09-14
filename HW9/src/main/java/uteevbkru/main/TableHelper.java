@@ -9,8 +9,6 @@ import java.lang.reflect.Field;
 
 public class TableHelper {
     private  Class clazz;
-    private static String NAME_USER = "users_hw9_name";
-    private static String AGE_USER = "users_hw9_age";
 
     public TableHelper(Class clazz){
         this.clazz = clazz;
