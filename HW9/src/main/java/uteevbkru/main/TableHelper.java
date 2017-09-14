@@ -7,11 +7,10 @@ import javax.persistence.Table;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
-/**
- * Created by anton on 25.08.17.
- */
 public class TableHelper {
     private  Class clazz;
+    private static String NAME_USER = "users_hw9_name";
+    private static String AGE_USER = "users_hw9_age";
 
     public TableHelper(Class clazz){
         this.clazz = clazz;
@@ -27,7 +26,6 @@ public class TableHelper {
         return name;
     }
 
-    //TODO
     public static String getNameOfColumnName(){
         String name = null;
         Field[] fds = UsersDataSet.class.getDeclaredFields();
@@ -40,7 +38,6 @@ public class TableHelper {
         return name;
     }
 
-    //TODO
     public static String getNameOfColumnAge(){
         String name = null;
         Field[] fds = UsersDataSet.class.getDeclaredFields();
