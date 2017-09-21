@@ -1,4 +1,4 @@
-package ru.otus.servlet;
+package uteevbkru.web;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

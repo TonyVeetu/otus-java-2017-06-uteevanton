@@ -1,4 +1,4 @@
-package ru.otus.servlet;
+package uteevbkru.web;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
@@ -9,7 +9,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 /**
  * @author v.chibrikov
  */
-public class Main {
+public class MainEmptyWS {
     private final static int PORT = 8090;
     private final static String PUBLIC_HTML = "public_html";
 
