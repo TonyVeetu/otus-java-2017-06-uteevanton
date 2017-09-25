@@ -27,7 +27,7 @@ public class Main {
     private final static int PORT = 8090;
     private final static String PUBLIC_HTML = "public_html";
 
-    public static int COUNT_USER = 30;
+    public static int COUNT_USER = 10;
     public static int RANGE_ID = 10;
     public static void main(String [] args) throws Exception{
         DBService service = DBServiceImpl.getInstance();
@@ -43,7 +43,7 @@ public class Main {
         context.addServlet(new ServletHolder(new LoginServlet("anonymous")), "/login");
         context.addServlet(new ServletHolder(new AdminServlet(service)), "/admin");
         context.addServlet(TimerServlet.class, "/timer");
-
+        
 
         Server server = new Server(PORT);
         server.setHandler(new HandlerList(resourceHandler, context));

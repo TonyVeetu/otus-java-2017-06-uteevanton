@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>ru.otus</groupId>
-    <artifactId>L12.1</artifactId>
+    <groupId>otus-HW12</groupId>
+    <artifactId>HW12</artifactId>
     <version>1.0</version>
 
     <properties>
