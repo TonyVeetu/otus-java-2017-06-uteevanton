@@ -2,18 +2,20 @@ package uteevbkru;
 
 import java.util.Arrays;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
-    private static Integer CURRENT_THREAD_ALL = new Integer(0);
-    private static AtomicInteger COUNTER = new AtomicInteger(0);
+    private static Integer COUNTER_OF_THREAD = new Integer(0);
     private static int COUNT_OF_THREAD = 4;
     private static int SIZE = 1_000_000;
     private static int RANGE = 100;
 
     public static void main(String... args){
-        parallelWork();
-        //usialWork();
+        if(SIZE % COUNT_OF_THREAD == 0) {
+            parallelWork();
+            //usualWork();
+        }
+        else
+            System.out.println((char) 27 + "[31mYou must enter right size!( size%count_thread = 0!)" + (char)27 + "[0m");
     }
 
     public static void parallelWork(){
@@ -43,13 +45,13 @@ public class Main {
 
         for(int i = 0; i < COUNT_OF_THREAD; i++) {
             mas[i] = new Thread(() -> {
-                int CURRENT_THREAD = 0;
-                synchronized (CURRENT_THREAD_ALL) {// Я же не могу быть уверенным что в этот момент другой поток не схватит CURRENT_THREAD_ALL!
-                    CURRENT_THREAD = CURRENT_THREAD_ALL;
-                    CURRENT_THREAD_ALL = CURRENT_THREAD + 1;
+                int current_thread = 0;
+                synchronized (COUNTER_OF_THREAD) {// Я же не могу быть уверенным, что в этот момент другой поток не схватит COUNTER_OF_THREAD!
+                    current_thread = COUNTER_OF_THREAD;
+                    COUNTER_OF_THREAD = current_thread + 1;
                 }
-                massOfMass[CURRENT_THREAD] = Arrays.copyOfRange(massOfRandVal, (SIZE / COUNT_OF_THREAD) * CURRENT_THREAD, ((SIZE / COUNT_OF_THREAD) * (CURRENT_THREAD + 1)));
-                Arrays.sort(massOfMass[CURRENT_THREAD]);
+                massOfMass[current_thread] = Arrays.copyOfRange(massOfRandVal, (SIZE / COUNT_OF_THREAD) * current_thread, ((SIZE / COUNT_OF_THREAD) * (current_thread + 1)));
+                Arrays.sort(massOfMass[current_thread]);
             });
             mas[i].start();
         }
@@ -80,7 +82,7 @@ public class Main {
             System.out.println((char) 27 + "[33mSuccess! FinalMass was sorted!!"+ (char)27 + "[0m");
     }
 
-    public static void usialWork(){
+    public static void usualWork(){
         int[] massOfRandVal = new int[SIZE];
         Random rand = new Random(System.currentTimeMillis());
         for(int i = 0; i < massOfRandVal.length; i++ ){
