@@ -34,7 +34,7 @@ public class AdminServlet extends HttpServlet {
 
 //    private void initBeansFromServletContext(ServletConfig config) {
 //        ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(config.getServletContext());
-//        //TODO
+//        //TODO встроить USserDAO, Cashe beans!
 //        dbService = (DBService) context.getBean("dbService");
 //    }
 
@@ -102,7 +102,7 @@ public class AdminServlet extends HttpServlet {
             DBService service = dbService;
             Random random = new Random(System.currentTimeMillis());
             int count = 0;
-            while (count < 10) {
+            while (count < 30) {
 
                 Long id = (long) (random.nextInt(100) + 1);
                 service.get(id);

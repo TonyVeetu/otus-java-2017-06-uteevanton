@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>Calculator</title>
+</head>
+<body>
+<div class="top">
+    <a href="login">Login</a> <a href="admin">Admin</a> <a href="timer">Timer</a> <a href="calc">Calc</a>
+</div>
+<div class="calc">
+    <form action="/calc" method="GET">
+        <span><b>Formula: </b></span>
+        <br/>
+
+        <input type="text" name="val_a"/>
+        <br/>
+
+        <select name="operation">
+            <option>&#x2B</option>
+            <option>&#x2D</option>
+            <option>&#x2A</option>
+            <option>&#x2F</option>
+        </select>
+        <br/>
+
+        <input type="text" name="val_b"/>
+        <br/>
+        <!--  <button>Calculate</button>  -->
+        <input type="submit" value="Calculate">
+        <br/>
+        <span><b>Result: </b></span>
+        <br/>
+
+        <input type="text" name="RES" />
+    </form>
+</div>
+
+<p>Result: ${result}</p>
+</body>
+<!--
+<body>
+    <h1>Calculator</h1>
+
+    <span><b>Web service: </b></span>
+    <br/>
+    <input type="text" id="server" value="http://localhost:8090/func" />
+    <br/>
+    <br/>
+
+    <span><b>Formula: </b></span>
+    <br/>
+
+    <input type="text" id="val_a" value="8.78" />
+    <br/>
+
+    <select id="operation">
+        <option>&#x2B</option>
+        <option>&#x2D</option>
+        <option>&#x2A</option>
+        <option>&#x2F</option>
+    </select>
+    <br/>
+
+    <input type="text" id="val_b" value="4.15" />
+
+    <br/>
+
+    <button>Calculate</button>
+    <br/>
+    <br/>
+
+    <span><b>Result: </b></span>
+    <br/>
+
+    <input type="text" id="result" />
+
+    <p>Message:</p>
+</body>
+-->
+<!--
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $("button").click(function(){
+            var url = $("#server").val() +
+                "?a=" + $("#val_a").val() +
+                "&b=" + $("#val_b").val() +
+                "&op=" + encodeURIComponent($("#operation").val());
+            $.ajax({
+                url: url,
+                success:function(json){
+                    if (json.error == 0)
+                        $("#result").val(json.result);
+                    else
+                        $("#result").val("Error");
+                },
+                error:function(){
+                    $("#result").val("Error");
+                }
+            });
+        });
+    });
+</script> -->
+
+</html>
