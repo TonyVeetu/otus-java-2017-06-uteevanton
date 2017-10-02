@@ -2,91 +2,112 @@ package uteevbkru;
 
 import java.util.Arrays;
 import java.util.Random;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
-    private static Integer COUNTER_OF_THREAD = new Integer(0);
-    private static int COUNT_OF_THREAD = 4;
-    private static int SIZE = 1_000_000;
-    private static int RANGE = 100;
+    private static AtomicInteger counterOfThread = new AtomicInteger(0);
+    private static int countOfThread = 16;
+    private static int sizeOfMassWithRandomValue = 32;
+    private static int rangeOfRandomValue = 100;
 
     public static void main(String... args){
-        if(SIZE % COUNT_OF_THREAD == 0) {
-            parallelWork();
-            //usualWork();
+        if((sizeOfMassWithRandomValue % countOfThread == 0)  ) {
+            if(powerOfTwo(countOfThread) != -1) {
+                parallelSortOfMassWithRandomValue(countOfThread);
+                //notParallelSortOfMassWithRandomValue();
+            }
+            else
+                System.out.println((char) 27 + "[31mYou must use count of thread equal powerOfTwo!( size%count_thread = 0!)" + (char)27 + "[0m");
         }
         else
-            System.out.println((char) 27 + "[31mYou must enter right size!( size%count_thread = 0!)" + (char)27 + "[0m");
+            System.out.println((char) 27 + "[31mYou must use right size of massive( size%count_thread = 0!)" + (char)27 + "[0m");
     }
 
-    public static void parallelWork(){
-        int[] massOfRandVal = new int[SIZE];
+    public static void parallelSortOfMassWithRandomValue(int  countOfThread){
+//+++++++++++++__Create_the_MassWithRandomVal__+++++++++
+        int[] massOfRandVal = new int[sizeOfMassWithRandomValue];
         Random rand = new Random(System.currentTimeMillis());
         for(int i = 0; i < massOfRandVal.length; i++ ){
-            massOfRandVal[i] = rand.nextInt(RANGE + 1);
+            massOfRandVal[i] = rand.nextInt(rangeOfRandomValue + 1);
         }
-//+++++++_Create_4_Mass_++++++++++
-        int[][] massOfMass = new int[COUNT_OF_THREAD][SIZE/COUNT_OF_THREAD];
-        for(int cur_mass = 0; cur_mass < massOfMass.length; cur_mass++){
-            massOfMass[cur_mass] = new int[COUNT_OF_THREAD];
+//+++++++_Create_the Massive_of_massivies++++++++++
+        int[][] massOfMass = new int[countOfThread][sizeOfMassWithRandomValue /countOfThread];
+        for(int current_mass = 0; current_mass < massOfMass.length; current_mass++){
+            massOfMass[current_mass] = new int[sizeOfMassWithRandomValue /countOfThread];
         }
-
-        long time1 = System.currentTimeMillis();
-
-        Thread th1 = new Thread();
-        Thread th2 = new Thread();
-        Thread th3 = new Thread();
-        Thread th4 = new Thread();
-        Thread[] mas = new Thread[4];
-
-        mas[0] = th1;
-        mas[1] = th2;
-        mas[2] = th3;
-        mas[3] = th4;
-
-        for(int i = 0; i < COUNT_OF_THREAD; i++) {
-            mas[i] = new Thread(() -> {
-                int current_thread = 0;
-                synchronized (COUNTER_OF_THREAD) {// Я же не могу быть уверенным, что в этот момент другой поток не схватит COUNTER_OF_THREAD!
-                    current_thread = COUNTER_OF_THREAD;
-                    COUNTER_OF_THREAD = current_thread + 1;
-                }
-                massOfMass[current_thread] = Arrays.copyOfRange(massOfRandVal, (SIZE / COUNT_OF_THREAD) * current_thread, ((SIZE / COUNT_OF_THREAD) * (current_thread + 1)));
+///++++++++++++__Create_threads_and_parallel_sorting__+++++++++
+        long timeStart = System.currentTimeMillis();
+        CountDownLatch latch = new CountDownLatch(countOfThread);
+        for(int i = 0; i < countOfThread; i++) {
+            Thread t = new Thread(() -> {
+                int current_thread = counterOfThread.getAndIncrement();
+                massOfMass[current_thread] = Arrays.copyOfRange(massOfRandVal, (sizeOfMassWithRandomValue / countOfThread) * current_thread, ((sizeOfMassWithRandomValue / countOfThread) * (current_thread + 1)));
                 Arrays.sort(massOfMass[current_thread]);
+                latch.countDown();
             });
-            mas[i].start();
+            t.start();
         }
-
-        for(int i = 0; i < COUNT_OF_THREAD; i++) {
-            try {
-                mas[i].join();
-            }
-            catch (InterruptedException e){
-                e.printStackTrace();
-            }
+        try {
+            latch.await();
         }
+        catch (InterruptedException e ){
+            e.printStackTrace();
+        }
+        long timeFinish = System.currentTimeMillis();
+        System.out.println("\n"+"Time for parallel work: "+(timeFinish-timeStart));
 
-        long time2 = System.currentTimeMillis();
-        System.out.println("\n"+"Time for parallel work:"+(time2-time1));
-//++++++++++++++++
-        int[] part1 = new int[(SIZE/COUNT_OF_THREAD)*2];
-        int[] part2 = new int[(SIZE/COUNT_OF_THREAD)*2];
-        myMergeSort(massOfMass[0], massOfMass[1] ,part1);
-        myMergeSort(massOfMass[2], massOfMass[3] ,part2);
-
-        int[] finalMass = new int[SIZE];
-        myMergeSort(part1, part2, finalMass);
-
+//++++++++++++++++__Union_of_results__*++++++++++++
+        int[] finalMass = new int[sizeOfMassWithRandomValue];
+        unionOfResults(massOfMass, finalMass ,countOfThread);
+//++++++++++__Testing_final_massive__+++++++++++
         if(!testingFinalMass(finalMass))
             System.out.println((char) 27 + "[31m***_Error_***!!! FinalMass wasn't sorted!!" + (char)27 + "[0m");
         else
             System.out.println((char) 27 + "[33mSuccess! FinalMass was sorted!!"+ (char)27 + "[0m");
     }
 
-    public static void usualWork(){
-        int[] massOfRandVal = new int[SIZE];
+    public static void unionOfResults(int[][] massOfMass, int[] outputMass, int countOfThread){
+        if(countOfThread/2 == 1){
+            myMergeSort(massOfMass[0], massOfMass[1], outputMass);
+        }
+        else {
+            int size =  sizeOfMassWithRandomValue/countOfThread;
+            int[][] resMass = new int[countOfThread/2][size*2];
+            //printMassOfMass(massOfMass);
+            int j = 0;
+            for(int i = 0; i < countOfThread/2; i++){
+                myMergeSort(massOfMass[j], massOfMass[++j] ,resMass[i]);// Занимательно, что нужно ++j, а j++ работать не будет! Что и логично!
+                ++j;
+            }
+            //printMassOfMass(resMass);
+            unionOfResults(resMass, outputMass,countOfThread/2);
+        }
+    }
+
+    public static void printMassOfMass(int[][] mas){
+        for(int i = 0; i < mas.length; i++){
+            for(int j = 0; j < mas[i].length; j++){
+                System.out.print(mas[i][j]+"\t");
+            }
+            System.out.println();
+        }
+        System.out.println("*************");
+    }
+
+    public static void printMass(int[] mas){
+        for(int i = 0; i < mas.length; i++){
+            System.out.print(mas[i]+"\t");
+        }
+
+        System.out.println("\n"+"*****__FINISH__******");
+    }
+
+    public static void notParallelSortOfMassWithRandomValue(){
+        int[] massOfRandVal = new int[sizeOfMassWithRandomValue];
         Random rand = new Random(System.currentTimeMillis());
         for(int i = 0; i < massOfRandVal.length; i++ ){
-            massOfRandVal[i] = rand.nextInt(RANGE + 1);
+            massOfRandVal[i] = rand.nextInt(rangeOfRandomValue + 1);
         }
 
         long time3 = System.currentTimeMillis();
@@ -141,6 +162,26 @@ public class Main {
             }
             return true;
         }
+        System.out.println((char) 27 + "[31mInput massive is null!" + (char)27 + "[0m");
         return false;
     }
+
+    /**
+     * @param value
+     * @return 2^return value = param value or -1;
+     */
+    public static int powerOfTwo(int value){
+        if(value % 2 == 0 && value > 1) {
+            return 1 + powerOfTwo(value/2);
+        }
+        else if(value == 1){
+            return 0;
+        }
+        else {
+            return -1;
+        }
+    }
+
+
+
 }
