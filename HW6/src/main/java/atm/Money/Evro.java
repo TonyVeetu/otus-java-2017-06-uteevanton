@@ -4,17 +4,18 @@ package atm.Money;
  * Created by anton on 28.07.17.
  */
 public class Evro extends Money {
-    private final String name = " Evro";
-    private int count;
+    private int amountOfMoney;
+    private Currency evro = Currency.EVRO;
 
-    public Evro(){
-        count = 0;
+    public Evro(){}
+    public Evro(int amountOfMoney){
+        this.amountOfMoney = amountOfMoney;
     }
 
-    public String getName(){
-        return name;
+    public Currency getCurrency(){
+        return evro;
     }
-    public int getCount(){
-        return count;
+    public int getAmountOfMoney(){
+        return amountOfMoney;
     }
 }

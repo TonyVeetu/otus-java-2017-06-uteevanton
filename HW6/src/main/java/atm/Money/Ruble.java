@@ -4,22 +4,20 @@ package atm.Money;
  * Created by anton on 28.07.17.
  */
 public class Ruble extends Money {
-    private final String name = " rub";
-    private int count;
+    private Currency ruble = Currency.RUBLE;
+    private int amountOfMoney = 0;
 
-    public Ruble(){
-        count = 0;
+    public Ruble(){}
+
+    public Ruble(int amountOfMoney){
+        this.amountOfMoney = amountOfMoney;
     }
 
-    public Ruble(int count){
-        this.count = count;
+    public Currency getCurrency(){
+        return ruble;
     }
 
-    public String getName(){
-        return name;
-    }
-
-    public int getCount(){
-        return count;
+    public int getAmountOfMoney(){
+        return amountOfMoney;
     }
 }

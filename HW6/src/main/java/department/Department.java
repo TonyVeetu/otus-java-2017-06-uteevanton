@@ -2,15 +2,13 @@ package department;
 
 import atm.Atm;
 import atm.Cell;
+import atm.Money.Currency;
 import atm.Money.Dollar;
 import atm.Money.Money;
 import atm.Money.Ruble;
 
 import java.util.ArrayList;
 
-/**
- * Created by anton on 06.08.17.
- */
 public class Department {
 
     private ArrayList<Atm> atms = new ArrayList<>();
@@ -20,27 +18,28 @@ public class Department {
     }
 
     public int countAllMoneyInRub(){
+        Ruble ruble = new Ruble();
         int Sym = 0;
         for(int i = 0; i < atms.size(); i++){
-            Sym += atms.get(i).getResidue(Atm.typeCash[0]);
+            Sym += atms.get(i).getResidue(ruble);
         }
         return Sym;
     }
 
-    public int countMoney(Money m){
+    public int countMoney(Money money){
         int Sym = 0;
         for(int i = 0; i < atms.size(); i++){
-            Sym += atms.get(i).getResidue(m);
+            Sym += atms.get(i).getResidue(money);
         }
         return Sym;
     }
 
     public void init(){
-        Cell cell1 = new Cell(1, 10, new Ruble());
-        Cell cell2 = new Cell(5, 10, new Ruble());
-        Cell cell3 = new Cell(10, 10, new Ruble());
-        Cell cell4 = new Cell(25, 10, new Ruble());
-        Cell cell5 = new Cell(50, 10, new Ruble());
+        Cell cell1 = new Cell(1, 10, Currency.RUBLE);
+        Cell cell2 = new Cell(5, 10, Currency.RUBLE);
+        Cell cell3 = new Cell(10, 10, Currency.RUBLE);
+        Cell cell4 = new Cell(25, 10, Currency.RUBLE);
+        Cell cell5 = new Cell(50, 10, Currency.RUBLE);
 
 
         ArrayList<Cell> cells = new ArrayList<>(5);
@@ -53,11 +52,11 @@ public class Department {
 
         atms.add(atm1);
 
-        Cell cell11 = new Cell(5, 10, new Ruble());
-        Cell cell12 = new Cell(10, 10, new Ruble());
-        Cell cell13 = new Cell(50, 10, new Ruble());
-        Cell cell14 = new Cell(100, 10, new Ruble());
-        Cell cell15 = new Cell(1000, 10, new Ruble());
+        Cell cell11 = new Cell(5, 10, Currency.RUBLE);
+        Cell cell12 = new Cell(10, 10, Currency.RUBLE);
+        Cell cell13 = new Cell(50, 10, Currency.RUBLE);
+        Cell cell14 = new Cell(100, 10, Currency.RUBLE);
+        Cell cell15 = new Cell(1000, 10, Currency.RUBLE);
 
         ArrayList<Cell> cells2 = new ArrayList<>(5);
         cells2.add(cell11);

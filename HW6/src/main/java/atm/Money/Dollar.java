@@ -4,21 +4,19 @@ package atm.Money;
  * Created by anton on 28.07.17.
  */
 public class Dollar extends Money {
-    private final String name = " Dollar";
-    private int count;
+    private Currency dollar = Currency.DOLLAR;
+    private int amountOfMoney;
 
-    public Dollar(){
-        count = 0;
+    public Dollar(){}
+
+    public Dollar(int amountOfMoney){
+        this.amountOfMoney = amountOfMoney;
     }
 
-    public Dollar(int count){
-        this.count = count;
+    public Currency getCurrency(){
+        return dollar;
     }
-
-    public String getName(){
-        return name;
-    }
-    public int getCount(){
-        return count;
+    public int getAmountOfMoney(){
+        return amountOfMoney;
     }
 }

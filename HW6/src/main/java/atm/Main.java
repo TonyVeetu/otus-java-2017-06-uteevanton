@@ -1,25 +1,17 @@
 package atm;
 
-
-import atm.Money.Dollar;
-import atm.Money.Ruble;
+import atm.Money.*;
 
 import java.util.ArrayList;
 
-/**
- * Created by tully.
- */
 public class Main {
     public static void main(String[] args) {
 
-
-        Cell cell1 = new Cell(1, 10, new Ruble());
-        Cell cell2 = new Cell(5, 10, new Ruble());
-        Cell cell3 = new Cell(10, 10, new Ruble());
-        Cell cell4 = new Cell(25, 10, new Ruble());
-
-        //Cell cell5 = new Cell(50, 10, new Ruble());
-        Cell cell5 = new Cell(50, 10, new Dollar());
+        Cell cell1 = new Cell(1, 10, Currency.RUBLE);
+        Cell cell2 = new Cell(5, 10, Currency.RUBLE);
+        Cell cell3 = new Cell(10, 10, Currency.RUBLE);
+        Cell cell4 = new Cell(25, 10, Currency.RUBLE);
+        Cell cell5 = new Cell(50, 10, Currency.DOLLAR);
 
         ArrayList<Cell> cells = new ArrayList<>(5);
 

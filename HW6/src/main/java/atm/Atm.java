@@ -1,10 +1,7 @@
 package atm;
 
-import atm.Money.Evro;
+import atm.Money.*;
 import atm.Strategy.GreedyAlgorithm;
-import atm.Money.Dollar;
-import atm.Money.Money;
-import atm.Money.Ruble;
 import atm.Strategy.OptimaAlgorithm;
 import atm.Strategy.WithdrawAlgorithm;
 
@@ -14,9 +11,8 @@ import java.util.*;
  * Created by anton on 27.07.17.
  */
 public class Atm {
-    public static final Money[] typeCash = {new Ruble(), new Dollar(), new Evro()}; //TODO think должен ли я это use????
-
-    private ArrayList<Cell> cellsAtm = new ArrayList<>(5);
+    private static final int COUNT_OF_CELLS_IN_ATM = 5;
+    private ArrayList<Cell> cellsAtm = new ArrayList<>(COUNT_OF_CELLS_IN_ATM);
     private WithdrawAlgorithm algorithm;
     private boolean isEmptyCell;
     private final String pass = "SuperJavaInOtus";
@@ -46,26 +42,23 @@ public class Atm {
      * Пользователь хочет дать деньги вызывая этот метод!!
      * И ячейка может быть переполненой isFull
      */
-    public boolean getCash(Money m){
-        // TODO есть два метода get/giveCash которые очень похожи!!
-        //Вопрос, неявляется ли это антипаттерном??
-        //Можно ли этого избежать??
-        if(m.getCount() <= 0)
+    public boolean getCash(Money money){
+        if(money.getAmountOfMoney() <= 0)
             return false;
 
-        if(!checkFreePlaceInCells(m)) {
-            System.out.println("Atm "+ getUniqueID() + " don't have enough space. You want to get: " + m.getCount());
+        if(!checkFreePlaceInCells(money)) {
+            System.out.println("Atm "+ getUniqueID() + " don't have enough space. You want to getCurrencyOfCell: " + money.getAmountOfMoney());
             return false;
         }
 
-        int Symm = m.getCount();
-        int i = 4;
+        int Symm = money.getAmountOfMoney();
+        //int i = 4;
+        int i = cellsAtm.size() - 1;
         while(Symm != 0){
-            if( (cellsAtm.get(i).typeCash()).equals(m.getName())){
+            if(cellsAtm.get(i).getCurrencyOfCell() == money.getCurrency()){
                 if(Symm >= cellsAtm.get(i).getNominal() && !cellsAtm.get(i).getIsFull()){
                     if(cellsAtm.get(i).getNote()){
                         Symm -= cellsAtm.get(i).getNominal();
-                        //System.out.println("get: "+cellsAtm.get(i).getNominal());
                     }
                 }
                 if(Symm >= cellsAtm.get(i).getNominal() && !cellsAtm.get(i).getIsFull()){
@@ -73,7 +66,7 @@ public class Atm {
                 }
             }
             if(i == 0){
-                i = 4;
+                i = cellsAtm.size() - 1;
             }
             i--;
         }
@@ -82,48 +75,49 @@ public class Atm {
 
     /**Проверяет достаточно ли места в банкомате, чтобы положить в него деньги!
      *
-     * @param m
+     * @param money
      * @return
      */
-    private boolean checkFreePlaceInCells(Money m){
+    private boolean checkFreePlaceInCells(Money money){
         int maxSym = 0;
         for(Cell cell : cellsAtm) {
-            if(cell.getTypeCash().equals(m.getName())){
+            if(cell.getCurrencyOfCell() == money.getCurrency()){
                 maxSym += (Cell.MAX_COUNT_NOTE - cell.getCountOfNote())*cell.getNominal();
             }
         }
-        if(maxSym < m.getCount())
+        if(maxSym < money.getAmountOfMoney())
             return false;
         return true;
     }
+
+
     /**
      * Пользователь получает деньги вызывая этот метод!!
      */
-
-    public boolean giveCash( Money m){
-        if( !checkBalance(m)){
+    public boolean giveCash( Money money){
+        if( !checkBalance(money)){
             return false;
         }
-        System.out.println("__****__I want to GIVE " + m.getCount() + m.getName() + "!__***___");
+        System.out.println("__****__I want to GIVE " + money.getAmountOfMoney() + "currency:" + money.getCurrency() + "!__***___");
         // Если ячейка пустая, то нужно переключить алгоритм выдачи денег!
         //TODO think!!//Правильно ли реализована логика переключения алгоритма?????????
         checkEmptyCell();
-        algorithm.giveMoney(m, cellsAtm);
+        algorithm.giveMoney(money, cellsAtm);
         return true;
     }
 
     // Проверяет достаточно ли денег в банкомате!
     private boolean checkBalance(Money m){
-        if(m.getCount() < 0) {
-            System.out.println("Error!!! It's impossible: " + m.getCount() + " " + m.getName());
+        if(m.getAmountOfMoney() < 0) {
+            System.out.println("Error!!! It's impossible: " + m.getAmountOfMoney() + " " + m.getCurrency());
             return false;
         }
         int Symm = 0;
         for(int i = 0; i < cellsAtm.size(); i++){
             Symm += cellsAtm.get(i).getCash(m);
         }
-        if(m.getCount() > Symm) {
-            System.out.println("********__Error!!! You want to much money: " + m.getCount() + " " + m.getName() + "___*****");
+        if(m.getAmountOfMoney() > Symm) {
+            System.out.println("********__Error!!! You want to much money: " + m.getAmountOfMoney() + " currency:" + m.getCurrency() + "___*****");
             return false;
         }
         else
@@ -132,12 +126,12 @@ public class Atm {
 
 
     public void printState(){
-        System.out.println((char) 27 + "[33mState atm and atm's cellsAtm: " + (char)27 + "[0m");
+        System.out.println((char) 27 + "[33mState atm and atm's cells: " + (char)27 + "[0m");
         System.out.println("\t" + "All money in ATM in rub = " + this.getResidue(new Ruble()));
         System.out.println("\t" + "All money in ATM in $ = " + this.getResidue(new Dollar()));
         for(int i = 0; i < cellsAtm.size(); i++){
             int[] mas = cellsAtm.get(i).getStateCell();
-            System.out.print("\t" + "Cell_"+ i + " - parOfNode: " + mas[0] + ", count: " + mas[1] + ", type cash - " + cellsAtm.get(i).typeCash() + ", isEmpty: " + mas[2] + ", isFull: " + mas[3]);
+            System.out.print("\t" + "Cell_"+ i + " - parOfNode: " + mas[0] + ", count: " + mas[1] + ", currency - " + cellsAtm.get(i).getCurrencyOfCell() + ", isEmpty: " + mas[2] + ", isFull: " + mas[3]);
             System.out.println();
         }
     }

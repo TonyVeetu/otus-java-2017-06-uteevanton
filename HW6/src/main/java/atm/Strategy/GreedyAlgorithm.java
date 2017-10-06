@@ -1,8 +1,6 @@
 package atm.Strategy;
 
-import atm.Atm;
 import atm.Cell;
-import atm.Money.Dollar;
 import atm.Money.Money;
 
 import java.util.ArrayList;
@@ -18,15 +16,15 @@ public class GreedyAlgorithm  implements StrategyAlgorithm {
     }
 
     public boolean giveMoney(Money m, ArrayList<Cell> cellsGreed){
-        int Symm = m.getCount();
+        int Symm = m.getAmountOfMoney();
         int i = 4;
 
         while(Symm != 0){
-            if( (cellsGreed.get(i).typeCash()).equals(m.getName())){
+            if(cellsGreed.get(i).getCurrencyOfCell() == m.getCurrency()){
                 if(Symm >= cellsGreed.get(i).getNominal() && !cellsGreed.get(i).getIsEmpty()){
                     if(cellsGreed.get(i).giveNote()){
                         Symm -= cellsGreed.get(i).getNominal();
-                        //System.out.println("Greedy algorithm give: "+cellsGreed.get(i).getNominal());
+                        //System.out.println("Greedy algorithm give: "+cellsGreed.getCurrencyOfCell(i).getNominal());
                     }
                 }
                 if(Symm >= cellsGreed.get(i).getNominal() && !cellsGreed.get(i).getIsEmpty()){

@@ -1,5 +1,6 @@
 package atm;
 
+import atm.Money.Currency;
 import atm.Money.Money;
 
 /**
@@ -13,27 +14,27 @@ public class Cell {
     private boolean isFull;//При true ячейка переполнена и положить в нее деньги нельзя!
     private int nominal;// номинал купюры
     private int countOfNote = 1;// количество купюр
-    private Money m;// вид денег: рубли или доллары или евро!
+    private Currency currency;// вид денег: рубли или доллары или евро!
 
-    public Cell(Integer value, Integer countOfNote, Money m){
+    public Cell(int value, int countOfNote, Currency currency){
         if(value > 0 && countOfNote > 0) {
             nominal = value;
             this.countOfNote = countOfNote;// !! Ноль тоже учитывается!!
-            this.m = m;
+            this.currency = currency;
             isEmpty = false;
             isFull = false;
         }
         else{
             isEmpty = true;
             isFull = false;
-            System.out.println("Error in initialization Cell");
+            System.out.println("Error in initialization of Cells");
         }
     }
 
     public Cell(Cell cell){
         nominal = cell.getNominal();
         countOfNote = cell.getCountOfNote();
-        m = cell.getM();
+        currency = cell.getCurrencyOfCell();
         isEmpty = cell.getIsEmpty();
         isFull = getIsFull();
     }
@@ -44,16 +45,14 @@ public class Cell {
 
     public int getCountOfNote(){return countOfNote;}
 
-    public Money getM(){return m;}
-
-    public String getTypeCash(){return m.getName();}
+    public Currency getCurrencyOfCell(){return currency;}
 
     /**
-     * @param typeCash тип валюты
+     * @param money тип валюты
      * @return
      */
-    int getCash(Money typeCash){
-        if((this.m.getName()).equals(typeCash.getName())){
+    int getCash(Money money){
+        if(this.currency == money.getCurrency()){
             return nominal *countOfNote;
         }
         return 0;
@@ -100,10 +99,6 @@ public class Cell {
 
     boolean getIsFull(){
         return isFull;
-    }
-
-    public String typeCash(){
-        return m.getName();
     }
 
     /**

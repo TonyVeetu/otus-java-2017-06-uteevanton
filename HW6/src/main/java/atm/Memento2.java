@@ -1,7 +1,6 @@
 package atm;
 
 import atm.Strategy.GreedyAlgorithm;
-import atm.Strategy.StrategyAlgorithm;
 import atm.Strategy.WithdrawAlgorithm;
 
 import java.util.ArrayList;
@@ -39,7 +38,11 @@ public class Memento2 {
         System.out.println((char) 27 + "[36mState Memento2" + (char)27 + "[0m");
         for(int i = 0; i < saveCells.size(); i++){
             int[] mas = saveCells.get(i).getStateCell();
-            System.out.print("\t" + "Cell_"+ i + " - parOfNode: " + mas[0] + ", count: " + mas[1] + ", type cash - " + saveCells.get(i).typeCash() + ", isEmpty: " + mas[2] + ", isFull: " + mas[3]);
+            System.out.print("\t" + "Cell_"+ i + " - parOfNode: " + mas[0]
+                    + ", count: " + mas[1]
+                    + ", currencyOfCell - " + saveCells.get(i).getCurrencyOfCell()
+                    + ", isEmpty: " + mas[2]
+                    + ", isFull: " + mas[3]);
             System.out.println();
         }
         System.out.println("\t" + "Algorithm: " + saveAlgorithm.getName());
