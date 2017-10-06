@@ -11,11 +11,11 @@ import java.util.*;
  * Created by anton on 27.07.17.
  */
 public class Atm {
-    private static final int COUNT_OF_CELLS_IN_ATM = 5;
+    public static final int COUNT_OF_CELLS_IN_ATM = 5;
+
     private ArrayList<Cell> cellsAtm = new ArrayList<>(COUNT_OF_CELLS_IN_ATM);
     private WithdrawAlgorithm algorithm;
     private boolean isEmptyCell;
-    private final String pass = "SuperJavaInOtus";
     private Memento2 memento;
     private final String uniqueID = UUID.randomUUID().toString();
 
@@ -93,37 +93,41 @@ public class Atm {
 
     /**
      * Пользователь получает деньги вызывая этот метод!!
+     * Если какая-то ячейка пустая, то нужно переключить алгоритм выдачи денег!
      */
     public boolean giveCash( Money money){
         if( !checkBalance(money)){
             return false;
         }
         System.out.println("__****__I want to GIVE " + money.getAmountOfMoney() + "currency:" + money.getCurrency() + "!__***___");
-        // Если ячейка пустая, то нужно переключить алгоритм выдачи денег!
-        //TODO think!!//Правильно ли реализована логика переключения алгоритма?????????
+
         checkEmptyCell();
+        switchAlgorithm();
         algorithm.giveMoney(money, cellsAtm);
         return true;
     }
 
-    // Проверяет достаточно ли денег в банкомате!
-    private boolean checkBalance(Money m){
-        if(m.getAmountOfMoney() < 0) {
-            System.out.println("Error!!! It's impossible: " + m.getAmountOfMoney() + " " + m.getCurrency());
+    /**Проверяет достаточно ли денег в банкомате!
+     *
+     * @param money
+     * @return
+     */
+    private boolean checkBalance(Money money){
+        if(money.getAmountOfMoney() < 0) {
+            System.out.println("Error!!! It's impossible: " + money.getAmountOfMoney() + " " + money.getCurrency());
             return false;
         }
         int Symm = 0;
         for(int i = 0; i < cellsAtm.size(); i++){
-            Symm += cellsAtm.get(i).getCash(m);
+            Symm += cellsAtm.get(i).getCash(money);
         }
-        if(m.getAmountOfMoney() > Symm) {
-            System.out.println("********__Error!!! You want to much money: " + m.getAmountOfMoney() + " currency:" + m.getCurrency() + "___*****");
+        if(money.getAmountOfMoney() > Symm) {
+            System.out.println("********__Error!!! You want to much money: " + money.getAmountOfMoney() + " currency:" + money.getCurrency() + "___*****");
             return false;
         }
         else
             return true;
     }
-
 
     public void printState(){
         System.out.println((char) 27 + "[33mState atm and atm's cells: " + (char)27 + "[0m");
@@ -140,35 +144,25 @@ public class Atm {
         isEmptyCell = false;// На случай если алгоритм нужно переключить еще раз!!!
         for(int i = 0; i < cellsAtm.size(); i++) {
             if (cellsAtm.get(i).getIsEmpty()) {
-                isEmptyCell = true;//Будет true только если есть пустой Cell
+                isEmptyCell = true;
             }
         }
-        if(isEmptyCell)//Если есть пустой Cell, то нужно переключить алгоритм!!
+    }
+
+    private void switchAlgorithm(){
+        if(isEmptyCell)
             algorithm.setAlgorithm(new OptimaAlgorithm());
         else
             algorithm.setAlgorithm(new GreedyAlgorithm());
     }
 
-
-    //Не нравиться то, что любой может вызвать recovery!!!!
-    //Что делать?
-    //Хотелось бы какую-то защиту от злоумыщленников! Ничего кроме простого пароля на ум не приходит!!
-    //Или не париться??
-    //TODO что делать??
-    public void recovery(String pass){
-        if(pass.equals(this.pass)){
-            System.out.println("Recovery is going for atm: " + getUniqueID());
-            cellsAtm.clear();
-            //memento.printStateMemento();
-            cellsAtm.addAll(memento.getSavedCells());
-            algorithm = memento.getSavedAlgorithm();
-            isEmptyCell = memento.getSavedIsEmptyCell();
-            //TODO где здесь должен быть caretaker    ????
-            //Или метод этот можно засчитать за caretaker?
-            printState();
-        }
-        else
-            System.out.println("Can not recovery atm " + getUniqueID());
+    public void recovery( ){
+        System.out.println("Recovery is going for atm: " + getUniqueID());
+        cellsAtm.clear();
+        cellsAtm.addAll(memento.getSavedCells());
+        algorithm = memento.getSavedAlgorithm();
+        isEmptyCell = memento.getSavedIsEmptyCell();
+        printState();
     }
 
 }

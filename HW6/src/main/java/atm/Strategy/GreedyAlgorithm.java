@@ -1,15 +1,13 @@
 package atm.Strategy;
 
+import atm.Atm;
 import atm.Cell;
 import atm.Money.Money;
 
 import java.util.ArrayList;
 
-/**
- * Created by anton on 31.07.17.
- */
 public class GreedyAlgorithm  implements StrategyAlgorithm {
-    private final String nameAlg = "Greedy";
+    private final String nameAlgorithm = "Greedy";
 
     public GreedyAlgorithm(){
 
@@ -17,7 +15,7 @@ public class GreedyAlgorithm  implements StrategyAlgorithm {
 
     public boolean giveMoney(Money m, ArrayList<Cell> cellsGreed){
         int Symm = m.getAmountOfMoney();
-        int i = 4;
+        int i = Atm.COUNT_OF_CELLS_IN_ATM - 1;
 
         while(Symm != 0){
             if(cellsGreed.get(i).getCurrencyOfCell() == m.getCurrency()){
@@ -28,16 +26,16 @@ public class GreedyAlgorithm  implements StrategyAlgorithm {
                     }
                 }
                 if(Symm >= cellsGreed.get(i).getNominal() && !cellsGreed.get(i).getIsEmpty()){
-                    i++;// Для того что бы вычитать мах раз одну и туже купюру!
+                    i++;// Для того что бы вычесть максимум раз одну и туже купюру!
                 }
             }
             if(i == 0){
-                i = 4;
+                i = Atm.COUNT_OF_CELLS_IN_ATM - 1;
             }
             i--;
         }
         return true;
     }
 
-    public String getName(){return nameAlg;}
+    public String getName(){return nameAlgorithm;}
 }

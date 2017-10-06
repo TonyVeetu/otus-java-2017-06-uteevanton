@@ -72,7 +72,6 @@ public class Department {
     public void work(){
         atms.get(0).giveCash(new Ruble(545));
         atms.get(0).giveCash(new Dollar(20));
-
         atms.get(1).giveCash(new Ruble(200));
         atms.get(1).giveCash(new Dollar(5));
     }
@@ -86,6 +85,6 @@ public class Department {
 
     public void recoveryCells(){
         for(int i = 0; i < atms.size(); i++)
-            atms.get(i).recovery("SuperJavaInOtus");
+            atms.get(i).recovery();
     }
 }
