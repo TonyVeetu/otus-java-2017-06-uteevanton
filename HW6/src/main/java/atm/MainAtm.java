@@ -28,7 +28,7 @@ public class MainAtm {
         WithdrawAlgorithm algorithm = atm.getAlgorithm();
         System.out.println(algorithm.getName());
         atm.giveCash(new Ruble(500));
-        //atm.giveCash(new Ruble(50));
+        atm.giveCash(new Ruble(50));
         atm.printState();
         WithdrawAlgorithm algorithm1 = atm.getAlgorithm();
         System.out.println(algorithm1.getName());

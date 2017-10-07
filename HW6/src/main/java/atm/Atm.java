@@ -164,7 +164,6 @@ public class Atm {
         for(int i = 0; i < cellsAtm.size(); i++) {
             if (cellsAtm.get(i).getIsEmpty()) {
                 isEmptyCell = true;
-                System.out.println("EmptyCell");
             }
         }
     }
@@ -172,7 +171,6 @@ public class Atm {
     private void switchAlgorithm(){
         if(isEmptyCell) {
             algorithm.setAlgorithm(new OptimaAlgorithm());
-            System.out.println("OPTIMA");
         }
         else
             algorithm.setAlgorithm(new GreedyAlgorithm());

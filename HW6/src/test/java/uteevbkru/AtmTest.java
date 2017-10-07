@@ -180,16 +180,13 @@ public class AtmTest {
 
         Atm atm = new Atm(cells);
 
-        atm.printState();
-        WithdrawAlgorithm algorithm = atm.getAlgorithm();
-        System.out.println(algorithm.getName());
-        atm.giveCash(new Ruble(520));
-        atm.giveCash(new Ruble(10));
-        atm.printState();
-        WithdrawAlgorithm algorithm1 = atm.getAlgorithm();
-        System.out.println(algorithm1.getName());
+        String algorithmName1 = atm.getAlgorithm().getName();
+        atm.giveCash(new Ruble(500));
+        atm.giveCash(new Ruble(50));
+        String algorithmName2 = atm.getAlgorithm().getName();
 
-        Assert.assertFalse("a".equals("av"));
+        Assert.assertFalse(algorithmName1.equals(algorithmName2));
+
     }
 
  }
