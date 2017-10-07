@@ -25,11 +25,12 @@ public class OptimaAlgorithm implements StrategyAlgorithm {
         int i = Atm.COUNT_OF_CELLS_IN_ATM - 1;
 
         while(Symm != 0){
-            if( cellsOptima.get(i).getCurrencyOfCell() == money.getCurrency() ){//  Запрошенная валюта!
+            if( cellsOptima.get(i).getCurrencyOfCell() == money.getCurrency() ){
                 if(Symm >= cellsOptima.get(i).getNominal() && !cellsOptima.get(i).getIsEmpty()){
                     if(cellsOptima.get(i).giveNote()){
                         Symm -= cellsOptima.get(i).getNominal();
-                        //System.out.println("Optima algorithm give: "+cellsOptima.getCurrencyOfCell(i).getNominal());
+                        System.out.println("Optima algorithm give: "+cellsOptima.get(i).getNominal()
+                                                            + ", Symm :"+ Symm + ", i = " + i);
                     }
                 }
             }

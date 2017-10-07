@@ -13,16 +13,16 @@ public class GreedyAlgorithm  implements StrategyAlgorithm {
 
     }
 
-    public boolean giveMoney(Money m, ArrayList<Cell> cellsGreed){
-        int Symm = m.getAmountOfMoney();
+    public boolean giveMoney(Money money, ArrayList<Cell> cellsGreed){
+        int Symm = money.getAmountOfMoney();
         int i = Atm.COUNT_OF_CELLS_IN_ATM - 1;
 
         while(Symm != 0){
-            if(cellsGreed.get(i).getCurrencyOfCell() == m.getCurrency()){
+            if(cellsGreed.get(i).getCurrencyOfCell() == money.getCurrency()){
                 if(Symm >= cellsGreed.get(i).getNominal() && !cellsGreed.get(i).getIsEmpty()){
                     if(cellsGreed.get(i).giveNote()){
                         Symm -= cellsGreed.get(i).getNominal();
-                        //System.out.println("Greedy algorithm give: "+cellsGreed.getCurrencyOfCell(i).getNominal());
+                        System.out.println("Greedy algorithm give: "+cellsGreed.get(i).getNominal());
                     }
                 }
                 if(Symm >= cellsGreed.get(i).getNominal() && !cellsGreed.get(i).getIsEmpty()){

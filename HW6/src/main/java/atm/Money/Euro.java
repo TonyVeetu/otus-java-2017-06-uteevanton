@@ -3,12 +3,12 @@ package atm.Money;
 /**
  * Created by anton on 28.07.17.
  */
-public class Evro extends Money {
+public class Euro extends Money {
     private int amountOfMoney;
-    private Currency evro = Currency.EVRO;
+    private Currency evro = Currency.EURO;
 
-    public Evro(){}
-    public Evro(int amountOfMoney){
+    public Euro(){}
+    public Euro(int amountOfMoney){
         this.amountOfMoney = amountOfMoney;
     }
 

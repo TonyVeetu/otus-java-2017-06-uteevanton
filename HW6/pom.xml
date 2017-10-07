@@ -44,7 +44,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>atm.Main</mainClass>
+                            <mainClass>atm.MainAtm</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

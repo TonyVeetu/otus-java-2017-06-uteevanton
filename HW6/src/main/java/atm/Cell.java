@@ -13,12 +13,13 @@ public class Cell {
     private boolean isEmpty;//При true ячейка пустая и выдать деньги не может!
     private boolean isFull;//При true ячейка переполнена и положить в нее деньги нельзя!
     private int nominal;// номинал купюры
-    private int countOfNote = 1;// количество купюр
-    private Currency currency;// вид денег: рубли или доллары или евро!
+    private int countOfNote;// количество купюр
+    private Currency currency;// валюта
 
-    public Cell(int value, int countOfNote, Currency currency){
-        if(value > 0 && countOfNote > 0) {
-            nominal = value;
+    public Cell(int nominal, int countOfNote, Currency currency){
+        //TODO use Nominal!
+        if(nominal > 0 && countOfNote >= MIN_COUNT_NOTE && countOfNote <= MAX_COUNT_NOTE) {
+            this.nominal = nominal;
             this.countOfNote = countOfNote;// !! Ноль тоже учитывается!!
             this.currency = currency;
             isEmpty = false;
@@ -51,9 +52,16 @@ public class Cell {
      * @param money тип валюты
      * @return
      */
-    int getCash(Money money){
+    public int getCash(Money money){
         if(this.currency == money.getCurrency()){
             return nominal *countOfNote;
+        }
+        return 0;
+    }
+
+    public int getFreeSpaceForMoney(Money money){
+        if(this.currency == money.getCurrency()){
+            return nominal * (Cell.MAX_COUNT_NOTE  - countOfNote);
         }
         return 0;
     }
@@ -63,49 +71,40 @@ public class Cell {
      * @return
      */
     private void increaseCountOfNote(){
-        if(countOfNote < MAX_COUNT_NOTE){
+        if(!isFull)
             countOfNote++;
-            if (countOfNote > MIN_COUNT_NOTE)
-                isEmpty = false;
-        }
-        else
-            isFull = true;
     }
 
     private void reduceCountOfNote(){
-        if(countOfNote > MIN_COUNT_NOTE){
+        if(!isEmpty)
             countOfNote--;
-            if(countOfNote < MAX_COUNT_NOTE)
-                isFull = false;
-        }
-        else {
-            isEmpty = true;
-        }
     }
 
     public boolean giveNote(){
-        reduceCountOfNote();
-        return !this.getIsEmpty();
+        if(!getIsEmpty())
+            reduceCountOfNote();
+        return !isEmpty;
     }
 
     boolean getNote(){
-        increaseCountOfNote();
-        return !this.getIsFull();
+        if(!getIsFull())
+            increaseCountOfNote();
+        return !isFull;
     }
 
     public boolean getIsEmpty(){
-        return isEmpty;
+        return isEmpty = ((countOfNote == MIN_COUNT_NOTE) ? true : false);
     }
 
     boolean getIsFull(){
-        return isFull;
+        return isFull = countOfNote == MAX_COUNT_NOTE ? true : false;
     }
 
     /**
      * Необходимо произвести проверку состояния ячейки!
      * @return
      */
-    int[] getStateCell() {
+    public int[] getStateCell(){
         if (countOfNote == MAX_COUNT_NOTE)
             isFull = true;
         if (countOfNote == MIN_COUNT_NOTE)

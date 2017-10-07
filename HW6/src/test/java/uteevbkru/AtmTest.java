@@ -4,7 +4,9 @@ import atm.Atm;
 import atm.Cell;
 import atm.Money.Currency;
 import atm.Money.Dollar;
+import atm.Money.Euro;
 import atm.Money.Ruble;
+import atm.Strategy.WithdrawAlgorithm;
 import org.junit.*;
 
 import java.util.ArrayList;
@@ -36,6 +38,28 @@ public class AtmTest {
         Assert.assertTrue(500 == atm.getResidue(new Dollar()));
     }
 
+    @Test
+    public void getFreeSpaceForAddingMoneyTest() {
+        System.out.println("\t\t" + "getFreeSpaceForAddingMoneyTest: ");
+        Cell cell1 = new Cell(1, 10, Currency.RUBLE);
+        Cell cell2 = new Cell(5, 10, Currency.RUBLE);
+        Cell cell3 = new Cell(10, 10, Currency.RUBLE);
+        Cell cell4 = new Cell(25, 10, Currency.RUBLE);
+        Cell cell5 = new Cell(50, 10, Currency.DOLLAR);
+
+        ArrayList<Cell> cells = new ArrayList<>(5);
+        cells.add(cell1);
+        cells.add(cell2);
+        cells.add(cell3);
+        cells.add(cell4);
+        cells.add(cell5);
+
+        Atm atm = new Atm(cells);
+
+        Assert.assertTrue(410 == atm.getFreeSpaceForAddingMoney(new Ruble()));
+        Assert.assertTrue(500 == atm.getFreeSpaceForAddingMoney(new Dollar()));
+        Assert.assertTrue(0 == atm.getFreeSpaceForAddingMoney(new Euro()));
+    }
 
 //    @Test
 //    public void checkSpaceTest(){
@@ -69,8 +93,8 @@ public class AtmTest {
     }
 
     @Test
-    public void getCashTestError(){
-        System.out.println("\t\t" + "getCashTestError: ");
+    public void getCashErrorTest(){
+        System.out.println("\t\t" + "getCashErrorTest: ");
         Cell cell1 = new Cell(1, 10, Currency.RUBLE);
         Cell cell2 = new Cell(5, 10, Currency.RUBLE);
         Cell cell3 = new Cell(10, 10, Currency.RUBLE);
@@ -91,8 +115,8 @@ public class AtmTest {
     }
 
     @Test
-    public void giveCash(){
-        System.out.println("\t\t" + "giveCash: ");
+    public void giveCashTest(){
+        System.out.println("\t\t" + "giveCashTest: ");
         Cell cell1 = new Cell(1, 10, Currency.RUBLE);
         Cell cell2 = new Cell(5, 10, Currency.RUBLE);
         Cell cell3 = new Cell(10, 10, Currency.RUBLE);
@@ -115,8 +139,9 @@ public class AtmTest {
         Assert.assertEquals(moneyAfter - 400, moneyBefore);
     }
 
-    public void giveCashError(){
-        System.out.println("\t\t" + "giveCashError: ");
+    @Test
+    public void giveCashErrorTest(){
+        System.out.println("\t\t" + "giveCashErrorTest: ");
         Cell cell1 = new Cell(1, 10, Currency.RUBLE);
         Cell cell2 = new Cell(5, 10, Currency.RUBLE);
         Cell cell3 = new Cell(10, 10, Currency.RUBLE);
@@ -135,8 +160,11 @@ public class AtmTest {
         Assert.assertFalse(atm.giveCash(new Ruble(4000)));
     }
 
-    //TODO почему с ней не работает!!!
-    public Atm initAtm(){
+
+    //TODO
+    @Test
+    public void switchAlgorithmTest(){
+        System.out.println("\t\t" + "switchAlgorithmTest: ");
         Cell cell1 = new Cell(1, 10, Currency.RUBLE);
         Cell cell2 = new Cell(5, 10, Currency.RUBLE);
         Cell cell3 = new Cell(10, 10, Currency.RUBLE);
@@ -152,6 +180,16 @@ public class AtmTest {
 
         Atm atm = new Atm(cells);
 
-        return atm;
+        atm.printState();
+        WithdrawAlgorithm algorithm = atm.getAlgorithm();
+        System.out.println(algorithm.getName());
+        atm.giveCash(new Ruble(520));
+        atm.giveCash(new Ruble(10));
+        atm.printState();
+        WithdrawAlgorithm algorithm1 = atm.getAlgorithm();
+        System.out.println(algorithm1.getName());
+
+        Assert.assertFalse("a".equals("av"));
     }
+
  }

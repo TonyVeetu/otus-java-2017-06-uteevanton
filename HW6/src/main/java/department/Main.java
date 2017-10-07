@@ -16,7 +16,7 @@ public class Main {
         dep.work();
         //dep.printState();
 
-        dep.recoveryCells();
+        dep.recoveryCells(false);
         //dep.printState();
     }
 }

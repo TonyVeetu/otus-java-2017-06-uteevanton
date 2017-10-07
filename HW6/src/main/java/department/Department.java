@@ -26,7 +26,7 @@ public class Department {
         return Sym;
     }
 
-    public int countMoney(Money money){
+    public int countOfMoney(Money money){
         int Sym = 0;
         for(int i = 0; i < atms.size(); i++){
             Sym += atms.get(i).getResidue(money);
@@ -83,8 +83,8 @@ public class Department {
         }
     }
 
-    public void recoveryCells(){
+    public void recoveryCells(boolean printState){
         for(int i = 0; i < atms.size(); i++)
-            atms.get(i).recovery();
+            atms.get(i).recovery(printState);
     }
 }
