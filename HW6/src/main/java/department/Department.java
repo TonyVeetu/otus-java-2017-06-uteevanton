@@ -13,8 +13,8 @@ public class Department {
 
     private ArrayList<Atm> atms = new ArrayList<>();
 
-    public Department(){
-
+    public Department(ArrayList<Atm> atms){
+        this.atms = atms;
     }
 
     public int countAllMoneyInRub(){
@@ -34,56 +34,22 @@ public class Department {
         return Sym;
     }
 
-    public void init(){
-        Cell cell1 = new Cell(1, 10, Currency.RUBLE);
-        Cell cell2 = new Cell(5, 10, Currency.RUBLE);
-        Cell cell3 = new Cell(10, 10, Currency.RUBLE);
-        Cell cell4 = new Cell(25, 10, Currency.RUBLE);
-        Cell cell5 = new Cell(50, 10, Currency.RUBLE);
-
-
-        ArrayList<Cell> cells = new ArrayList<>(5);
-        cells.add(cell1);
-        cells.add(cell2);
-        cells.add(cell3);
-        cells.add(cell4);
-        cells.add(cell5);
-        Atm atm1 = new Atm(cells);
-
-        atms.add(atm1);
-
-        Cell cell11 = new Cell(5, 10, Currency.RUBLE);
-        Cell cell12 = new Cell(10, 10, Currency.RUBLE);
-        Cell cell13 = new Cell(50, 10, Currency.RUBLE);
-        Cell cell14 = new Cell(100, 10, Currency.RUBLE);
-        Cell cell15 = new Cell(1000, 10, Currency.RUBLE);
-
-        ArrayList<Cell> cells2 = new ArrayList<>(5);
-        cells2.add(cell11);
-        cells2.add(cell12);
-        cells2.add(cell13);
-        cells2.add(cell14);
-        cells2.add(cell15);
-
-        Atm atm2 = new Atm(cells2);
-        atms.add(atm2);
+    public boolean getCash(Money money, int numberOfAtm){
+        return  atms.get(numberOfAtm).getCash(money);
     }
 
-    public void work(){
-        atms.get(0).giveCash(new Ruble(545));
-        atms.get(0).giveCash(new Dollar(20));
-        atms.get(1).giveCash(new Ruble(200));
-        atms.get(1).giveCash(new Dollar(5));
+    public boolean giveCash(Money money, int numberOfAtm){
+        return  atms.get(numberOfAtm).giveCash(money);
     }
 
     public void printState(){
         for(int i = 0; i < atms.size(); i++) {
-            System.out.println("Atm in use: " + atms.get(i).getUniqueID());
             atms.get(i).printState();
         }
     }
 
-    public void recoveryCells(boolean printState){
+    public void recoveryAtms(boolean printState){
+        System.out.println("Recovery Atms is starting!");
         for(int i = 0; i < atms.size(); i++)
             atms.get(i).recovery(printState);
     }

@@ -11,9 +11,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-/**
- * Created by anton on 11.08.17.
- */
 public class MementoTest {
     @Test
     public void mementoTest() {
@@ -32,12 +29,15 @@ public class MementoTest {
         cells.add(cell5);
 
         Atm atm = new Atm(cells);
+        String nameOfAlgorithmBefore = atm.getAlgorithm().getName();
 
         atm.getCash(new Ruble(200));
         atm.getCash(new Dollar(50));
 
         atm.recovery(false);
 
+        String nameOfAlgorithmAfter = atm.getAlgorithm().getName();
+        Assert.assertTrue(nameOfAlgorithmBefore.equals(nameOfAlgorithmAfter));
         Assert.assertTrue(410 == atm.getResidue(new Ruble()));
         Assert.assertTrue(500 == atm.getResidue(new Dollar()));
         Assert.assertTrue(0 == atm.getResidue(new Euro()));
