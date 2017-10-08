@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class DepartmentTest {
 
 @Test
-    public void amountOfmoneyTest(){
+    public void amountOfMoneyInDepartmentTest(){
     Cell cell1 = new Cell(1, 10, Currency.RUBLE);
     Cell cell2 = new Cell(5, 10, Currency.RUBLE);
     Cell cell3 = new Cell(10, 10, Currency.RUBLE);
