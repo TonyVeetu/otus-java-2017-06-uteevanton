@@ -7,43 +7,43 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
     private static AtomicInteger counterOfThread = new AtomicInteger(0);
-    private static int countOfThread = 16;
-    private static int sizeOfMassWithRandomValue = 32;
-    private static int rangeOfRandomValue = 100;
+    private static final int COUNT_OF_THREADS = 16;
+    private static final int SIZE_OF_ARRAY_WITH_RANDOM_VALUE = 32;
+    private static final int RANGE_OF_RANDOM_VALUE = 100;
 
     public static void main(String... args){
-        if((sizeOfMassWithRandomValue % countOfThread == 0)  ) {
-            if(powerOfTwo(countOfThread) != -1) {
-                parallelSortOfMassWithRandomValue(countOfThread);
-                //notParallelSortOfMassWithRandomValue();
+        if((SIZE_OF_ARRAY_WITH_RANDOM_VALUE % COUNT_OF_THREADS == 0)  ) {
+            if(powerOfTwo(COUNT_OF_THREADS) != -1) {
+                parallelSortOfArrayWithRandomValue(COUNT_OF_THREADS);
+                //notParallelSortOfArrayWithRandomValue();
             }
             else
                 System.out.println((char) 27 + "[31mYou must use count of thread equal powerOfTwo!( size%count_thread = 0!)" + (char)27 + "[0m");
         }
         else
-            System.out.println((char) 27 + "[31mYou must use right size of massive( size%count_thread = 0!)" + (char)27 + "[0m");
+            System.out.println((char) 27 + "[31mYou must use right size of array( size%count_thread = 0!)" + (char)27 + "[0m");
     }
 
-    public static void parallelSortOfMassWithRandomValue(int  countOfThread){
-//+++++++++++++__Create_the_MassWithRandomVal__+++++++++
-        int[] massOfRandVal = new int[sizeOfMassWithRandomValue];
+    public static void parallelSortOfArrayWithRandomValue(int countOfThread){
+//+++++++++++++__Create_the_ArrayWithRandomValue__+++++++++
+        int[] arrayWithRandomValue = new int[SIZE_OF_ARRAY_WITH_RANDOM_VALUE];
         Random rand = new Random(System.currentTimeMillis());
-        for(int i = 0; i < massOfRandVal.length; i++ ){
-            massOfRandVal[i] = rand.nextInt(rangeOfRandomValue + 1);
+        for(int i = 0; i < arrayWithRandomValue.length; i++ ){
+            arrayWithRandomValue[i] = rand.nextInt(RANGE_OF_RANDOM_VALUE + 1);
         }
-//+++++++_Create_the Massive_of_massivies++++++++++
-        int[][] massOfMass = new int[countOfThread][sizeOfMassWithRandomValue /countOfThread];
-        for(int current_mass = 0; current_mass < massOfMass.length; current_mass++){
-            massOfMass[current_mass] = new int[sizeOfMassWithRandomValue /countOfThread];
+//+++++++_Create_the_Array_of_arrays_++++++++++
+        int[][] arrayOfArrays = new int[countOfThread][SIZE_OF_ARRAY_WITH_RANDOM_VALUE /countOfThread];
+        for(int currentArray = 0; currentArray < arrayOfArrays.length; currentArray++){
+            arrayOfArrays[currentArray] = new int[SIZE_OF_ARRAY_WITH_RANDOM_VALUE /countOfThread];
         }
 ///++++++++++++__Create_threads_and_parallel_sorting__+++++++++
         long timeStart = System.currentTimeMillis();
         CountDownLatch latch = new CountDownLatch(countOfThread);
         for(int i = 0; i < countOfThread; i++) {
             Thread t = new Thread(() -> {
-                int current_thread = counterOfThread.getAndIncrement();
-                massOfMass[current_thread] = Arrays.copyOfRange(massOfRandVal, (sizeOfMassWithRandomValue / countOfThread) * current_thread, ((sizeOfMassWithRandomValue / countOfThread) * (current_thread + 1)));
-                Arrays.sort(massOfMass[current_thread]);
+                int currentThread = counterOfThread.getAndIncrement();
+                arrayOfArrays[currentThread] = Arrays.copyOfRange(arrayWithRandomValue, (SIZE_OF_ARRAY_WITH_RANDOM_VALUE / countOfThread) * currentThread, ((SIZE_OF_ARRAY_WITH_RANDOM_VALUE / countOfThread) * (currentThread + 1)));
+                Arrays.sort(arrayOfArrays[currentThread]);
                 latch.countDown();
             });
             t.start();
@@ -58,111 +58,108 @@ public class Main {
         System.out.println("\n"+"Time for parallel work: "+(timeFinish-timeStart));
 
 //++++++++++++++++__Union_of_results__*++++++++++++
-        int[] finalMass = new int[sizeOfMassWithRandomValue];
-        unionOfResults(massOfMass, finalMass ,countOfThread);
-//++++++++++__Testing_final_massive__+++++++++++
-        if(!testingFinalMass(finalMass))
-            System.out.println((char) 27 + "[31m***_Error_***!!! FinalMass wasn't sorted!!" + (char)27 + "[0m");
+        int[] finalArray = new int[SIZE_OF_ARRAY_WITH_RANDOM_VALUE];
+        unionOfResults(arrayOfArrays, finalArray ,countOfThread);
+//++++++++++__Testing_final_array__+++++++++++
+        if(!testingFinalArray(finalArray))
+            System.out.println((char) 27 + "[31m***_Error_***!!! FinalArray wasn't sorted!!" + (char)27 + "[0m");
         else
-            System.out.println((char) 27 + "[33mSuccess! FinalMass was sorted!!"+ (char)27 + "[0m");
+            System.out.println((char) 27 + "[33mSuccess! FinalArray was sorted!!"+ (char)27 + "[0m");
     }
 
-    public static void unionOfResults(int[][] massOfMass, int[] outputMass, int countOfThread){
+    public static void unionOfResults(int[][] arrayOfArrays, int[] outputArray, int countOfThread){
         if(countOfThread/2 == 1){
-            myMergeSort(massOfMass[0], massOfMass[1], outputMass);
+            mergeSort(arrayOfArrays[0], arrayOfArrays[1], outputArray);
         }
         else {
-            int size =  sizeOfMassWithRandomValue/countOfThread;
-            int[][] resMass = new int[countOfThread/2][size*2];
-            //printMassOfMass(massOfMass);
+            int size =  SIZE_OF_ARRAY_WITH_RANDOM_VALUE /countOfThread;
+            int[][] reservedArray = new int[countOfThread/2][size*2];
+
             int j = 0;
             for(int i = 0; i < countOfThread/2; i++){
-                myMergeSort(massOfMass[j], massOfMass[++j] ,resMass[i]);// Занимательно, что нужно ++j, а j++ работать не будет! Что и логично!
+                mergeSort(arrayOfArrays[j], arrayOfArrays[++j] ,reservedArray[i]);// Занимательно, что нужно ++j, а j++ работать не будет! Что и логично!
                 ++j;
             }
-            //printMassOfMass(resMass);
-            unionOfResults(resMass, outputMass,countOfThread/2);
+            unionOfResults(reservedArray, outputArray,countOfThread/2);
         }
     }
 
-    public static void printMassOfMass(int[][] mas){
-        for(int i = 0; i < mas.length; i++){
-            for(int j = 0; j < mas[i].length; j++){
-                System.out.print(mas[i][j]+"\t");
+    public static void printArrayOfArrays(int[][] array){
+        for(int i = 0; i < array.length; i++){
+            for(int j = 0; j < array[i].length; j++){
+                System.out.print(array[i][j]+"\t");
             }
             System.out.println();
         }
         System.out.println("*************");
     }
 
-    public static void printMass(int[] mas){
-        for(int i = 0; i < mas.length; i++){
-            System.out.print(mas[i]+"\t");
+    public static void printArray(int[] array){
+        for(int i = 0; i < array.length; i++){
+            System.out.print(array[i]+"\t");
         }
-
         System.out.println("\n"+"*****__FINISH__******");
     }
 
-    public static void notParallelSortOfMassWithRandomValue(){
-        int[] massOfRandVal = new int[sizeOfMassWithRandomValue];
+    public static void notParallelSortOfArrayWithRandomValue(){
+        int[] arrayOfRandomValue = new int[SIZE_OF_ARRAY_WITH_RANDOM_VALUE];
         Random rand = new Random(System.currentTimeMillis());
-        for(int i = 0; i < massOfRandVal.length; i++ ){
-            massOfRandVal[i] = rand.nextInt(rangeOfRandomValue + 1);
+        for(int i = 0; i < arrayOfRandomValue.length; i++ ){
+            arrayOfRandomValue[i] = rand.nextInt(RANGE_OF_RANDOM_VALUE + 1);
         }
 
-        long time3 = System.currentTimeMillis();
-        Arrays.sort(massOfRandVal);
-        long time4 = System.currentTimeMillis();
-        System.out.println("Time for usual work:"+(time4-time3));
+        long timeStart = System.currentTimeMillis();
+        Arrays.sort(arrayOfRandomValue);
+        long timeFinish = System.currentTimeMillis();
+        System.out.println("Time for usual work:"+(timeFinish-timeStart));
 
-
-        if(!testingFinalMass(massOfRandVal))
-            System.out.println((char) 27 + "[31m***_Error_***!!! FinalMass wasn't sorted!!" + (char)27 + "[0m");
+        if(!testingFinalArray(arrayOfRandomValue))
+            System.out.println((char) 27 + "[31m***_Error_***!!! FinalArray wasn't sorted!!" + (char)27 + "[0m");
         else
-            System.out.println((char) 27 + "[33mSuccess! FinalMass was sorted!!"+ (char)27 + "[0m");
+            System.out.println((char) 27 + "[33mSuccess! FinalArray was sorted!!"+ (char)27 + "[0m");
     }
 
     /**
-     * @param a1 input mass, length x
-     * @param a2 input mass, length x
-     * @param a3 output mass,  length 2*x
+     * @param inputArray1 - length x
+     * @param inputArray2 - length x
+     * @param outputArray - length 2*x
      */
-    public static void myMergeSort(int[] a1, int[] a2, int[] a3) {
+    public static void mergeSort(int[] inputArray1, int[] inputArray2, int[] outputArray) {
         int i=0, j=0;
-        for (int k=0; k<a3.length; k++) {
+        for (int k=0; k<outputArray.length; k++) {
 
-            if (i > a1.length-1) {
-                int a = a2[j];
-                a3[k] = a;
+            if (i > inputArray1.length-1) {
+                int a = inputArray2[j];
+                outputArray[k] = a;
                 j++;
             }
-            else if (j > a2.length-1) {
-                int a = a1[i];
-                a3[k] = a;
+            else if (j > inputArray2.length-1) {
+                int a = inputArray1[i];
+                outputArray[k] = a;
                 i++;
             }
-            else if (a1[i] < a2[j]) {
-                int a = a1[i];
-                a3[k] = a;
+            else if (inputArray1[i] < inputArray2[j]) {
+                int a = inputArray1[i];
+                outputArray[k] = a;
                 i++;
             }
             else {
-                int b = a2[j];
-                a3[k] = b;
+                int b = inputArray2[j];
+                outputArray[k] = b;
                 j++;
             }
         }
     }
 
-    public static boolean testingFinalMass(int[] mass){
-        if( mass != null){
-            for(int i = 0; i < mass.length - 1; i++){
-                if(mass[i] > mass[i+1])
+    public static boolean testingFinalArray(int[] array){
+        if( array != null){
+            for(int i = 0; i < array.length - 1; i++){
+                if(array[i] > array[i+1])
                     return false;
             }
             return true;
         }
-        System.out.println((char) 27 + "[31mInput massive is null!" + (char)27 + "[0m");
+        System.out.println((char) 27 + "[31mInput array is null!" + (char)27 + "[0m");
         return false;
     }
 
@@ -181,7 +178,4 @@ public class Main {
             return -1;
         }
     }
-
-
-
 }
