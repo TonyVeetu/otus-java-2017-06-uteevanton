@@ -1,0 +1,32 @@
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean id="timeService" class="uteevbkru.frontend.service.TimeService">
+        <constructor-arg name="pattern" value="HH**mm**ss"/>
+    </bean>
+    <!-- HW15 -->
+    <bean id="MessageSystem" class="uteevbkru.messageSystem.MessageSystem" init-method="start">
+    </bean>
+
+    <bean id="MessageSystemContext" class="uteevbkru.base.MessageSystemContext">
+        <constructor-arg name="messageSystem" ref ="MessageSystem"/>
+    </bean>
+
+    <bean id="frontAddress" class="uteevbkru.messageSystem.Address">
+        <constructor-arg name="id" value="Frontend"/>
+    </bean>
+    <bean id="frontService" class="uteevbkru.frontend.FrontendServiceImpl" init-method="init">
+        <constructor-arg name="context" ref="MessageSystemContext"/>
+        <constructor-arg name="address" ref="frontAddress"/>
+    </bean>
+
+    <bean id="dbAddress" class="uteevbkru.messageSystem.Address">
+        <constructor-arg name="id" value="DB"/>
+    </bean>
+    <bean id="dbService" class="uteevbkru.backend.db.dbService.DBServiceImpl" init-method="init">
+        <constructor-arg name="context" ref="MessageSystemContext"/>
+        <constructor-arg name="address" ref="dbAddress"/>
+    </bean>
+</beans>

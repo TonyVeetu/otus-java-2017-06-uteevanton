@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<web-app>
+
+    <display-name>HW15</display-name>
+    <description>Example with DBService MessageSystem Frontend</description>
+
+    <!-- HW15 path to Spring cfg -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:SpringBeans.xml</param-value>
+    </context-param>
+
+    <!-- HW15 Spring context load listener -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <servlet>
+        <servlet-name>timerServlet</servlet-name>
+        <servlet-class>uteevbkru.frontend.web.TimerServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>adminServlet</servlet-name>
+        <servlet-class>uteevbkru.frontend.web.AdminServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>loginServlet</servlet-name>
+        <servlet-class>uteevbkru.frontend.web.LoginServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>calcServlet</servlet-name>
+        <servlet-class>uteevbkru.frontend.web.CalcServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>timerServlet</servlet-name>
+        <url-pattern>/timer</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>adminServlet</servlet-name>
+        <url-pattern>/admin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>loginServlet</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>calcServlet</servlet-name>
+        <url-pattern>/calc</url-pattern>
+    </servlet-mapping>
+
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+
+</web-app>
