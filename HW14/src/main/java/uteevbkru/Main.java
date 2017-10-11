@@ -9,7 +9,7 @@ public class Main {
     private static AtomicInteger counterOfThread = new AtomicInteger(0);
     private static final int COUNT_OF_THREADS = 16;
     private static final int SIZE_OF_ARRAY_WITH_RANDOM_VALUE = 32;
-    private static final int RANGE_OF_RANDOM_VALUE = 100;
+    private static final int MAX_RANDOM_VALUE = 100;
 
     public static void main(String... args){
         if((SIZE_OF_ARRAY_WITH_RANDOM_VALUE % COUNT_OF_THREADS == 0)  ) {
@@ -29,7 +29,7 @@ public class Main {
         int[] arrayWithRandomValue = new int[SIZE_OF_ARRAY_WITH_RANDOM_VALUE];
         Random rand = new Random(System.currentTimeMillis());
         for(int i = 0; i < arrayWithRandomValue.length; i++ ){
-            arrayWithRandomValue[i] = rand.nextInt(RANGE_OF_RANDOM_VALUE + 1);
+            arrayWithRandomValue[i] = rand.nextInt(MAX_RANDOM_VALUE + 1);
         }
 //+++++++_Create_the_Array_of_arrays_++++++++++
         int[][] arrayOfArrays = new int[countOfThread][SIZE_OF_ARRAY_WITH_RANDOM_VALUE /countOfThread];
@@ -105,7 +105,7 @@ public class Main {
         int[] arrayOfRandomValue = new int[SIZE_OF_ARRAY_WITH_RANDOM_VALUE];
         Random rand = new Random(System.currentTimeMillis());
         for(int i = 0; i < arrayOfRandomValue.length; i++ ){
-            arrayOfRandomValue[i] = rand.nextInt(RANGE_OF_RANDOM_VALUE + 1);
+            arrayOfRandomValue[i] = rand.nextInt(MAX_RANDOM_VALUE + 1);
         }
 
         long timeStart = System.currentTimeMillis();
