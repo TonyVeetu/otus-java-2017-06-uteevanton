@@ -1,7 +1,7 @@
 package uteevbkru;
 
 import com.google.gson.Gson;
-import nickBobrov.BildHelper;
+import bilder.BuildHelper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,16 +12,16 @@ import org.junit.Test;
 public class JsonTest {
 
     private Gson gson;
-    private BildHelper wr;
+    private BuildHelper wr;
 
     @Before
     public void before(){
         gson = new Gson();
-        wr = new BildHelper();
+        wr = new BuildHelper();
     }
 
     @Test
-    public void test(){
+    public void myJsonAndGsonTest(){
         Integer i = new Integer(5);
         Assert.assertEquals(gson.toJson(i), wr.toJson(i));
     }
