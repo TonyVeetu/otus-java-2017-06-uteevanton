@@ -21,8 +21,8 @@ public class JsonTest {
     }
 
     @Test
-    public void myJsonAndGsonTest(){
+    public void toJsonAndGsonTest(){
         Integer i = new Integer(5);
-        Assert.assertEquals(gson.toJson(i), wr.toJson(i));
+        Assert.assertEquals(gson.toJson(i), wr.toJson1(i));
     }
 }

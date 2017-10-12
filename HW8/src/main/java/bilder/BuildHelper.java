@@ -15,7 +15,6 @@ public class BuildHelper {
 
     public static JsonArrayBuilder fillArrayBuilder(JsonArrayBuilder builder, Object array) {
         if (array instanceof Collection) {
-            //TODO!!
             Collection collection = (Collection) array;
             for (Object obj : collection) {
                 addObjectToArrayBuilder(builder, obj);
@@ -30,8 +29,6 @@ public class BuildHelper {
         return builder;
     }
 
-
-    @SuppressWarnings("unchecked")
     public static JsonObjectBuilder fillObjectBuilder(JsonObjectBuilder builder, Object object) {
         if (object instanceof Map) {
             Map map = (Map) object;
@@ -97,17 +94,18 @@ public class BuildHelper {
         return arrayBuilder.build();
     }
 
-    public JsonObject toJsonObject(Object object){
+    public JsonObject toJson1(Object object){
         JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
-        if(isArrayObject(object)){
-            JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
-            fillArrayBuilder(arrayBuilder, object);
-            objectBuilder.add("d",arrayBuilder);
-        }
-        else {
+        if(!isArrayObject(object))
             fillObjectBuilder(objectBuilder, object);
-            return objectBuilder.build();
-        }
-        return null;
+        return objectBuilder.build();
     }
+
+    public JsonArray toJson2(Object object) {
+        JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+        if (isArrayObject(object))
+            fillArrayBuilder(arrayBuilder, object);
+        return arrayBuilder.build();
+    }
+
 }
