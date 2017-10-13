@@ -1,10 +1,7 @@
 package uteevbkru.DBService;
 
-import uteevbkru.dataset.DataSet;
-import uteevbkru.dataset.UsersDAO;
-import uteevbkru.dataset.UsersDataSet;
-import uteevbkru.executor.TExecutor;
-import uteevbkru.main.TableHelper;
+import uteevbkru.dao.UserDAO;
+import uteevbkru.model.UserDataSet;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -13,16 +10,16 @@ import java.sql.SQLException;
  * Created by anton on 25.08.17.
  */
 public class DBServiceImpl implements DBService {
-    private UsersDAO dao;
+    private UserDAO dao;
     private Connection connection;
 
     public DBServiceImpl(Connection connection){
         this.connection = connection;
-        dao = new UsersDAO(connection);
+        dao = new UserDAO(connection);
     }
 
     @Override
-    public void save(UsersDataSet user){
+    public void save(UserDataSet user){
         try {
             dao.save(user);
         }
@@ -32,11 +29,11 @@ public class DBServiceImpl implements DBService {
     }
 
     @Override
-    public UsersDataSet load(Long id){
-        UsersDataSet user = null;
+    public UserDataSet load(Long id){
+        UserDataSet user = null;
 
         try {
-            user = dao.load(id, UsersDataSet.class);
+            user = dao.load(id, UserDataSet.class);
         }
         catch (SQLException e){
             e.printStackTrace();

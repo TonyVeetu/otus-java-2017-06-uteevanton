@@ -2,8 +2,8 @@ package uteevbkru;
 
 import uteevbkru.DBService.DBService;
 import uteevbkru.DBService.DBServiceImpl;
-import uteevbkru.dataset.UsersDataSet;
-import uteevbkru.main.ConnectionHelper;
+import uteevbkru.model.UserDataSet;
+import uteevbkru.help.ConnectionHelper;
 import java.io.IOException;
 import java.sql.Connection;
 
@@ -14,10 +14,10 @@ public class Main {
         Connection connection = ConnectionHelper.getConnection();
         DBService db = new DBServiceImpl(connection);
 
-        UsersDataSet user1 = new UsersDataSet("Xatiko Matiko Vatiko", 79);
+        UserDataSet user1 = new UserDataSet("Xatiko Matiko Vatiko", 79);
         db.save(user1);
 
-        UsersDataSet user2 = db.load(0L);
+        UserDataSet user2 = db.load(0L);
         System.out.println(user2.toString());
 
      }

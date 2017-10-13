@@ -1,4 +1,4 @@
-package uteevbkru.dataset;
+package uteevbkru.model;
 
 import javax.persistence.*;
 

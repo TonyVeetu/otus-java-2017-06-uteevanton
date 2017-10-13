@@ -1,4 +1,4 @@
-package uteevbkru.main;
+package uteevbkru.help;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -30,7 +30,7 @@ public class ConnectionHelper {
         }
     }
 
-    public static void example() {
+    public static void getInformationFromDB() {
         try (Connection connection = getConnection()) {
             System.out.println("Connected to: " + connection.getMetaData().getURL());
             System.out.println("DB name: " + connection.getMetaData().getDatabaseProductName());
