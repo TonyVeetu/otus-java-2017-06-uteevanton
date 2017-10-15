@@ -2,9 +2,6 @@ package uteevbkru.model;
 
 import javax.persistence.*;
 
-/**
- * Created by anton on 18.08.17.
- */
 @MappedSuperclass
 public abstract class DataSet {
     @Id

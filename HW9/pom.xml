@@ -31,10 +31,11 @@
             <artifactId>hibernate-jpa-2.0-api</artifactId>
             <version>1.0.1.Final</version>
         </dependency>
+
     </dependencies>
 
     <build>
-        <finalName>${project.name}</finalName>
+        <finalName>HW9</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>

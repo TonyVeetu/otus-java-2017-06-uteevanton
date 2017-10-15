@@ -14,13 +14,11 @@ public class Main {
         Connection connection = ConnectionHelper.getConnection();
         DBService db = new DBServiceImpl(connection);
 
-        UserDataSet user1 = new UserDataSet("Xatiko Matiko Vatiko", 79);
+        UserDataSet user1 = new UserDataSet("Anton", 26);
         db.save(user1);
 
-        UserDataSet user2 = db.load(0L);
-        System.out.println(user2.toString());
+        //UserDataSet user2 = db.load(2L);
+        //System.out.println(user2.toString());
 
      }
-
-
 }

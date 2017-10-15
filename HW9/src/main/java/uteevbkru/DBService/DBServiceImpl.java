@@ -6,9 +6,6 @@ import uteevbkru.model.UserDataSet;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-/**
- * Created by anton on 25.08.17.
- */
 public class DBServiceImpl implements DBService {
     private UserDAO dao;
     private Connection connection;
@@ -31,13 +28,7 @@ public class DBServiceImpl implements DBService {
     @Override
     public UserDataSet load(Long id){
         UserDataSet user = null;
-
-        try {
-            user = dao.load(id, UserDataSet.class);
-        }
-        catch (SQLException e){
-            e.printStackTrace();
-        }
+        user = dao.load(id, UserDataSet.class);
         return user;
     }
 

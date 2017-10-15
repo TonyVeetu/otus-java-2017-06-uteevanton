@@ -4,22 +4,22 @@ package uteevbkru.help;
 import java.util.List;
 
 public class TableColumnsFields {
-    private String name;
+    private String tableName;
     private ColumnNameField primaryKey;
     private List<ColumnNameField> columns;
 
     public TableColumnsFields(String name, ColumnNameField primaryKey, List<ColumnNameField> columns) {
-        this.name = name;
+        this.tableName = name;
         this.primaryKey = primaryKey;
         this.columns = columns;
     }
 
-    public String getName() {
-        return name;
+    public String getTableName() {
+        return tableName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
     }
 
     public ColumnNameField getPrimaryKey() {

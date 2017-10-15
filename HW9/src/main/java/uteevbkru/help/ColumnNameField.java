@@ -2,9 +2,6 @@ package uteevbkru.help;
 
 import java.lang.reflect.Field;
 
-/**
- * Created by yas on 13.10.17.
- */
 public class ColumnNameField {
     private String name;
     private Field field;

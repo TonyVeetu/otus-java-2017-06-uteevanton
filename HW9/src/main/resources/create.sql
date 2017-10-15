@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS "users_hw9" CASCADE;
+CREATE TABLE "users_hw9"
+(
+  id   BIGSERIAL PRIMARY KEY NOT NULL,
+  name VARCHAR DEFAULT NULL,
+  age  INT DEFAULT 0         NOT NULL
+);
+CREATE UNIQUE INDEX user_id_index
+  ON "users_hw9" (id);

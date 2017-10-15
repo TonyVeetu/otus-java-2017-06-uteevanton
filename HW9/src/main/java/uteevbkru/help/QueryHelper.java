@@ -10,21 +10,20 @@ public class QueryHelper {
     private QueryHelper() {
     }
 
-    public static <T extends DataSet> String makeSaveQuery(final T object, TableColumnsFields tableInfo) {
-        String query = "INSERT INTO \"" + tableInfo.getName() + "\" ";
+    public static <T extends DataSet> String makeSaveQuery(final T object, TableColumnsFields tableData) {
+        String saveQuery = "INSERT INTO \"" + tableData.getTableName() + "\" ";
 
-        List<ColumnNameField> columns = tableInfo.getColumns().stream().filter(c -> {
+        List<ColumnNameField> columns = tableData.getColumns().stream().filter(column -> {
             Object obj;
             try {
-                obj = c.getField().get(object);
-            } catch (IllegalAccessException e) {
+                obj = column.getField().get(object);
+            }
+            catch (IllegalAccessException e) {
                 obj = null;
             }
             return obj != null;
         }).collect(Collectors.toList());
 
-        //TODO think!!
-        //TODO
         String columnsName = columns.stream()
                 .map(ColumnNameField::getName)
                 .collect(Collectors.joining(",", "(", ")"));
@@ -34,32 +33,37 @@ public class QueryHelper {
                     try {
                         Object obj = c.getField().get(object);
                         return getValueStringForSQL(obj);
-                    } catch (IllegalAccessException e) {
-                        // Is never happens
+                    }
+                    catch (IllegalAccessException e) {
                         return null;
                     }
                 }).collect(Collectors.joining(",", "(", ")"));
 
-        query += columnsName + " VALUES " + columnsValue;
-        return query;
+        saveQuery += columnsName + " VALUES " + columnsValue;
+        System.out.println("saveQuery = " + saveQuery);
+        return saveQuery;
     }
 
-    public static String makeLoadQuery(final Object primaryKey, TableColumnsFields table) {
-        if (primaryKey != null) {
-            return "SELECT * FROM \""
-                    + table.getName()
+    public static String makeLoadQuery(final Object primaryKey, TableColumnsFields tableData) {
+        if(primaryKey != null){
+            System.out.println("loadQuery = " + "SELECT * FROM \""
+                    + tableData.getTableName()
                     + "\" WHERE "
-                    + table.getPrimaryKey().getName() + " = " + getValueStringForSQL(primaryKey);
-        } else {
-            return null;
+                    + tableData.getPrimaryKey().getName() + " = " + getValueStringForSQL(primaryKey));
+            return "SELECT * FROM \""
+                    + tableData.getTableName()
+                    + "\" WHERE "
+                    + tableData.getPrimaryKey().getName() + " = " + getValueStringForSQL(primaryKey);
         }
+        else
+            return null;
     }
 
     public static String getValueStringForSQL(Object value) {
-        if (value instanceof String) {
+        if(value instanceof String){
             return "'" + value.toString() + "'";
-        } else {
-            return value.toString();
         }
+        else
+            return value.toString();
     }
 }
