@@ -1,15 +1,11 @@
 package uteevbkru.backend.cache;
 
-/**
- * Created by tully.
- */
 @SuppressWarnings("WeakerAccess")
 public class MyElement<K, V> {
     private final K key;
     private final V value;
     private final long creationTime;
     private long lastAccessTime;
-
 
     public MyElement(K key, V value) {
         this.key = key;

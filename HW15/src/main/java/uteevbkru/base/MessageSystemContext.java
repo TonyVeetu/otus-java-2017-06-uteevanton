@@ -4,14 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import  uteevbkru.messageSystem.*;
 
-@Component
 public class MessageSystemContext {
     private final MessageSystem messageSystem;
 
     private Address frontAddress;
     private Address dbAddress;
 
-    @Autowired
     public MessageSystemContext(MessageSystem messageSystem) {
         this.messageSystem = messageSystem;
     }

@@ -1,8 +1,7 @@
 package uteevbkru.frontend.service;
 
-/**
- * Created by anton on 03.10.17.
- */
+@Deprecated
 public class AccountService {
-        //TODO
+    //@Deprecated так как функционал не сделан!
+    // TODO здесь должна быть регистрация пользователя = Http Session!!!!
 }

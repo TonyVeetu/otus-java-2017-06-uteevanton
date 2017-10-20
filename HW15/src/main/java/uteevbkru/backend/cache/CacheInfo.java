@@ -1,8 +1,5 @@
 package uteevbkru.backend.cache;
 
-/**
- * Created by anton on 14.09.17.
- */
 public interface CacheInfo {
     int getHitCount();
 
@@ -17,4 +14,6 @@ public interface CacheInfo {
     long getLifeTime();
 
     boolean isEternal();
+
+    int COUNT_OF_ELEMENT = 7;
 }

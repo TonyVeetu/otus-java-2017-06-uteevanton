@@ -1,32 +1,44 @@
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns="http://www.springframework.org/schema/beans"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
-	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+	        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-    <bean id="timeService" class="uteevbkru.frontend.service.TimeService">
-        <constructor-arg name="pattern" value="HH**mm**ss"/>
+    <import resource="service.xml"/>
+    <bean id="dbAddress" class="uteevbkru.messageSystem.Address">
+        <constructor-arg value="${idDb}"/>
     </bean>
-    <!-- HW15 -->
-    <bean id="MessageSystem" class="uteevbkru.messageSystem.MessageSystem" init-method="start">
+    <bean id="frontAddress" class="uteevbkru.messageSystem.Address">
+        <constructor-arg value="${idFront}"/>
     </bean>
-
+    <bean id="MessageSystem" class="uteevbkru.messageSystem.MessageSystem" init-method="startThreadForCheckMessage">
+        <!--вызывать init-method _!!_ метод в самом конце -->
+        <constructor-arg>
+            <list>
+                <ref bean="dbAddress"/>
+                <ref bean="frontAddress"/>
+            </list>
+        </constructor-arg>
+    </bean>
     <bean id="MessageSystemContext" class="uteevbkru.base.MessageSystemContext">
         <constructor-arg name="messageSystem" ref ="MessageSystem"/>
     </bean>
-
-    <bean id="frontAddress" class="uteevbkru.messageSystem.Address">
-        <constructor-arg name="id" value="Frontend"/>
-    </bean>
-    <bean id="frontService" class="uteevbkru.frontend.FrontendServiceImpl" init-method="init">
+    <bean id="frontService" class="uteevbkru.frontend.FrontendServiceImpl">
         <constructor-arg name="context" ref="MessageSystemContext"/>
         <constructor-arg name="address" ref="frontAddress"/>
     </bean>
 
-    <bean id="dbAddress" class="uteevbkru.messageSystem.Address">
-        <constructor-arg name="id" value="DB"/>
+    <bean id="softCache" class="uteevbkru.backend.cache.SoftCacheEngineImpl">
+        <constructor-arg value="${maxSize}"/>
+        <constructor-arg value="${idleTime}"/>
+        <constructor-arg value="${liveTime}"/>
     </bean>
-    <bean id="dbService" class="uteevbkru.backend.db.dbService.DBServiceImpl" init-method="init">
+    <bean id="dbService" class="uteevbkru.backend.db.dbService.DBServiceImpl">
         <constructor-arg name="context" ref="MessageSystemContext"/>
         <constructor-arg name="address" ref="dbAddress"/>
+        <constructor-arg>
+            <bean class="uteevbkru.backend.db.dao.UserDAO"/>
+        </constructor-arg>
+        <constructor-arg name="cache"  ref="softCache"/>
     </bean>
 </beans>

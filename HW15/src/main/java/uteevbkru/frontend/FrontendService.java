@@ -2,11 +2,7 @@ package uteevbkru.frontend;
 
 import uteevbkru.messageSystem.Addressee;
 
-/**
- * Created by anton on 03.10.17.
- */
 public interface FrontendService extends Addressee {
-    void init();
 
     void handleRequest(String login);
 

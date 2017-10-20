@@ -4,20 +4,15 @@ import org.springframework.stereotype.Component;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * @author tully
- */
-@Component
-public final class Address {
-    private static final AtomicInteger ID_GENERATOR = new AtomicInteger();
+public final class Address implements Addressee{
     private final String id;
-
-    public Address(){
-        id = String.valueOf(ID_GENERATOR.getAndIncrement());
-    }
 
     public Address(String id) {
         this.id = id;
+    }
+
+    public Address getAddress(){
+        return this;
     }
 
     @Override

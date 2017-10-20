@@ -11,33 +11,24 @@ import uteevbkru.backend.db.dataSet.UserDataSet;
 import uteevbkru.messageSystem.Address;
 import uteevbkru.messageSystem.Addressee;
 
-
-/**
- * Created by anton on 27.08.17.
- */
-@Service
 public class DBServiceImpl implements DBService, Addressee {
     private UserDAO userDAO;
     private final CacheEngine<Long, UserDataSet> cache;
     private final Address address;
     private final MessageSystemContext context;
 
-    @Autowired
-    public DBServiceImpl(MessageSystemContext context, Address address) {
+    public DBServiceImpl(MessageSystemContext context, Address address, UserDAO userDAO, CacheEngine cache) {
         this.context = context;
         this.address = address;
-        userDAO = new UserDAO();
-        cache = new SoftCacheEngineImpl<>(100, 1000, 0);
+        this.userDAO = userDAO;//new UserDAO();
+        this.cache = cache;//new SoftCacheEngineImpl<>(100, 1000, 0);//TODO где я должен указать <Long, UserDataSet>??
     }
 
     @Override
     public Address getAddress() {
         return address;
     }
-    
-    public void init() {
-        context.getMessageSystem().addAddressee(this);
-    }
+
 
     @Override
     public void saveUser(UserDataSet user){

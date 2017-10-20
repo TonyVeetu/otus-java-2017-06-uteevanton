@@ -5,9 +5,6 @@ import uteevbkru.messageSystem.Address;
 import uteevbkru.messageSystem.Addressee;
 import uteevbkru.messageSystem.Message;
 
-/**
- * Created by tully.
- */
 public abstract class MsgToDB extends Message {
     public MsgToDB(Address from, Address to) {
         super(from, to);

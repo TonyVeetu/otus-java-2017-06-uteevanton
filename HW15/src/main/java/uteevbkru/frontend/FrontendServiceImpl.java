@@ -2,6 +2,7 @@ package uteevbkru.frontend;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uteevbkru.backend.cache.CacheInfo;
 import uteevbkru.base.MessageSystemContext;
 import uteevbkru.base.msg.MsgGetCacheStat;
 import uteevbkru.base.msg.MsgGetUserId;
@@ -11,25 +12,16 @@ import uteevbkru.messageSystem.Message;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by anton on 03.10.17.
- */
-@Service
 public class FrontendServiceImpl implements FrontendService {
     private final Address address;
     private final MessageSystemContext context;
 
     private final Map<Integer, String> users = new HashMap<>();
-    private int[] cacheStatistic = new int[7];//TODO на что заменить 7!
+    private int[] cacheStatistic = new int[CacheInfo.COUNT_OF_ELEMENT];
 
-    @Autowired
     public FrontendServiceImpl(MessageSystemContext context, Address address) {
         this.context = context;
         this.address = address;
-    }
-
-    public void init() {
-        context.getMessageSystem().addAddressee(this);
     }
 
     @Override
