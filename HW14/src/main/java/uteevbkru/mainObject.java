@@ -1,17 +1,15 @@
 package uteevbkru;
 
+import uteevbkru.helper.SortHelper;
 import uteevbkru.parallel.ParallelSort;
 
 
 public class mainObject {
     public static void main(String[] args){
-        boolean isPrint = true;
-        ParallelSort sort = new ParallelSort(8, 100, 32);
-        sort.fillArray(isPrint);
-        sort.initArrayOfArrays();
-        sort.fillAndSortArrayOfArrays(isPrint);
-        sort.unionOfResults(sort.getArrayOfArrays(), sort.getFinalArray(), sort.getCountOfThreads());
-        sort.finalArrayTest(isPrint);
+        ParallelSort parallelSort = new ParallelSort(8, true);
+        int[] array = new int[32];
+        SortHelper.fillArrayWithRandomValue(true, array, 100);
+        parallelSort.sort(array);
     }
 
 }

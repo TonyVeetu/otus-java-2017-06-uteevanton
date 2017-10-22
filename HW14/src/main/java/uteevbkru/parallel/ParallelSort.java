@@ -3,62 +3,60 @@ package uteevbkru.parallel;
 import uteevbkru.helper.SortHelper;
 
 import java.util.Arrays;
-import java.util.Random;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static uteevbkru.helper.SortHelper.testingFinalArray;
 
-public class ParallelSort {
+public class ParallelSort implements Sort{
     private AtomicInteger counterOfThread = new AtomicInteger(0);
     CountDownLatch latch;
     private int countOfThreads;
-    private int sizeOfArrayWithRandomValue;
-    private int maxRandomValue;
-    private int[] arrayWithRandomValue;
+    private int sizeOfArray;
+    int[] array;
     int[][] arrayOfArrays;
     int[] finalArray;
+    private boolean isPrint = false;
 
-    public ParallelSort(int countOfThreads, int maxRandomValue, int sizeOfArrayWithRandomValue){
-        this.maxRandomValue = maxRandomValue;
+    public ParallelSort(int countOfThreads, boolean isPrint){
         latch = new CountDownLatch(countOfThreads);
-
-        if((sizeOfArrayWithRandomValue % countOfThreads == 0)){
-            if(powerOfTwo(countOfThreads) != -1) {
-                this.countOfThreads = countOfThreads;
-                this.sizeOfArrayWithRandomValue = sizeOfArrayWithRandomValue;
-                arrayWithRandomValue = new int[this.sizeOfArrayWithRandomValue];
-                finalArray = new int[sizeOfArrayWithRandomValue];
-            }
-            else
-                System.out.println((char) 27 + "[31mYou must use count of thread equal powerOfTwo!( size%count_thread = 0!)" + (char)27 + "[0m");
+        if(powerOfTwo(countOfThreads) != -1) {
+            this.countOfThreads = countOfThreads;
+            this.isPrint = isPrint;
         }
         else
-            System.out.println((char) 27 + "[31mYou must use right size of array( size%count_thread = 0!)" + (char)27 + "[0m");
+            System.out.println((char) 27 + "[31mYou must use count of " +
+                    "thread equal powerOfTwo!" +
+                    "( size%count_thread = 0!)" + (char)27 + "[0m");
     }
 
-    public void fillArray(boolean isPrint){
-        Random rand = new Random(System.currentTimeMillis());
-        for(int i = 0; i < arrayWithRandomValue.length; i++ ){
-            arrayWithRandomValue[i] = rand.nextInt(maxRandomValue + 1);
-        }
-        if(isPrint){
-            System.out.println("\t"+"fillArray:");
-            SortHelper.printArray(arrayWithRandomValue);
-        }
+    /**
+        Размер массива должен делиться на количество потоков без остатка!!!
+     */
+    public void sort(int[] mass){
+        sizeOfArray = mass.length;
+        array = mass;
+        finalArray = new int[sizeOfArray];
+
+        initArrayOfArrays(sizeOfArray);
+        fillAndSortArrayOfArrays(isPrint, sizeOfArray);
+        unionOfResults(arrayOfArrays, finalArray, countOfThreads);
+        finalArrayTest(isPrint);
+
     }
 
-    public void initArrayOfArrays(){
-        arrayOfArrays = new int[countOfThreads][sizeOfArrayWithRandomValue /countOfThreads];
+    public void initArrayOfArrays(int size){
+        arrayOfArrays = new int[countOfThreads][size/countOfThreads];
         for(int currentArray = 0; currentArray < arrayOfArrays.length; currentArray++) {
-            arrayOfArrays[currentArray] = new int[sizeOfArrayWithRandomValue / countOfThreads];
+            arrayOfArrays[currentArray] = new int[size/countOfThreads];
         }
     }
 
-    public void fillAndSortArrayOfArrays(boolean isPrint){
+    public void fillAndSortArrayOfArrays(boolean isPrint, int size){
         long timeStart = System.currentTimeMillis();
         for(int i = 0; i < countOfThreads; i++) {
-            Thread sortThread = new SortThread();
+            Thread sortThread = new SortThread(size);
             sortThread.start();
         }
         try {
@@ -75,14 +73,13 @@ public class ParallelSort {
         }
     }
 
-    //TODO меня смущает эта функция потому что, 1. нужны входные параметры 2. количество входных параметров три - это много!
-    //Но что сделать не придумал! Дмитрий, помогите советом! =)
+    //TODO think!!!
     public void unionOfResults(int[][] arrayOfArrays, int[] outputArray, int countOfThread){
         if(countOfThread/2 == 1){
             mergeSort(arrayOfArrays[0], arrayOfArrays[1], outputArray);
         }
         else {
-            int size =  sizeOfArrayWithRandomValue /countOfThread;
+            int size =  sizeOfArray /countOfThread;
             int[][] reservedArray = new int[countOfThread/2][size*2];
 
             int j = 0;
@@ -101,18 +98,6 @@ public class ParallelSort {
             System.out.println((char) 27 + "[31m" +"\n" + "***_Error_***!!! FinalArray wasn't sorted!!" + (char)27 + "[0m");
         else
             System.out.println((char) 27 + "[33m" +"\n" + "Success! FinalArray was sorted!!"+ (char)27 + "[0m");
-    }
-
-    public int[] getFinalArray(){
-        return finalArray;
-    }
-
-    public int[][] getArrayOfArrays(){
-        return arrayOfArrays;
-    }
-
-    public int getCountOfThreads(){
-        return countOfThreads;
     }
 
     /**
@@ -164,12 +149,16 @@ public class ParallelSort {
     }
 
     private class SortThread extends Thread{
+        private int size;
+        public SortThread(int size){
+            this.size = size;
+        }
         @Override
         public void run(){
             int currentThread = counterOfThread.getAndIncrement();
-            int from = (sizeOfArrayWithRandomValue / countOfThreads) * currentThread;
-            int to = ((sizeOfArrayWithRandomValue / countOfThreads) * (currentThread + 1));
-            arrayOfArrays[currentThread] = Arrays.copyOfRange(arrayWithRandomValue, from, to);
+            int from = (size / countOfThreads) * currentThread;
+            int to = ((size / countOfThreads) * (currentThread + 1));
+            arrayOfArrays[currentThread] = Arrays.copyOfRange(array, from, to);
             Arrays.sort(arrayOfArrays[currentThread]);
             latch.countDown();
         }

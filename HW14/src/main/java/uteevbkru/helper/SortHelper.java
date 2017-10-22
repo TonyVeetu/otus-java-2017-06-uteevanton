@@ -1,5 +1,7 @@
 package uteevbkru.helper;
 
+import java.util.Random;
+
 public class SortHelper {
 
     public static void printArrayOfArrays(int[][] array){
@@ -14,6 +16,17 @@ public class SortHelper {
     public static void printArray(int[] array){
         for(int i = 0; i < array.length; i++){
             System.out.print(array[i]+"\t");
+        }
+    }
+
+    public static void fillArrayWithRandomValue(boolean isPrint, int[] arrayWithRandomValue, int maxRandomValue){
+        Random rand = new Random(System.currentTimeMillis());
+        for(int i = 0; i < arrayWithRandomValue.length; i++ ){
+            arrayWithRandomValue[i] = rand.nextInt(maxRandomValue + 1);
+        }
+        if(isPrint){
+            System.out.println("\t"+"fillArray:");
+            SortHelper.printArray(arrayWithRandomValue);
         }
     }
 
