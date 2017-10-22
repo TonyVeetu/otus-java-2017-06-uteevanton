@@ -1,5 +1,6 @@
 package uteevbkru.helper;
 
+import java.util.List;
 import java.util.Random;
 
 public class SortHelper {
@@ -19,14 +20,20 @@ public class SortHelper {
         }
     }
 
-    public static void fillArrayWithRandomValue(boolean isPrint, int[] arrayWithRandomValue, int maxRandomValue){
+    public static void printList(List<Integer> array){
+        for(int i = 0; i < array.size(); i++){
+            System.out.print(array.get(i)+"\t");
+        }
+    }
+
+    public static void fillListWithRandomValue(boolean isPrint, List<Integer> arrayWithRandomValue,int size, int maxRandomValue){
         Random rand = new Random(System.currentTimeMillis());
-        for(int i = 0; i < arrayWithRandomValue.length; i++ ){
-            arrayWithRandomValue[i] = rand.nextInt(maxRandomValue + 1);
+        for(int i = 0; i < size; i++ ){
+            arrayWithRandomValue.add(rand.nextInt(maxRandomValue + 1));
         }
         if(isPrint){
             System.out.println("\t"+"fillArray:");
-            SortHelper.printArray(arrayWithRandomValue);
+            SortHelper.printList(arrayWithRandomValue);
         }
     }
 

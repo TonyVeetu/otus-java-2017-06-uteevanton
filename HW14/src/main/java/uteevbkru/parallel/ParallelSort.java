@@ -31,19 +31,33 @@ public class ParallelSort implements Sort{
                     "( size%count_thread = 0!)" + (char)27 + "[0m");
     }
 
+    public ParallelSort(int countOfThreads){
+        latch = new CountDownLatch(countOfThreads);
+        if(powerOfTwo(countOfThreads) != -1) {
+            this.countOfThreads = countOfThreads;
+        }
+        else
+            System.out.println((char) 27 + "[31mYou must use count of " +
+                    "thread equal powerOfTwo!" +
+                    "( size%count_thread = 0!)" + (char)27 + "[0m");
+    }
+
     /**
         Размер массива должен делиться на количество потоков без остатка!!!
      */
-    public void sort(int[] mass){
-        sizeOfArray = mass.length;
-        array = mass;
-        finalArray = new int[sizeOfArray];
+    public void sort(List<Integer> list){
+        if(list.size() % countOfThreads == 0) {
+            sizeOfArray = list.size();
+            array = list.stream().mapToInt(i -> i).toArray();
+            finalArray = new int[sizeOfArray];
 
-        initArrayOfArrays(sizeOfArray);
-        fillAndSortArrayOfArrays(isPrint, sizeOfArray);
-        unionOfResults(arrayOfArrays, finalArray, countOfThreads);
-        finalArrayTest(isPrint);
-
+            initArrayOfArrays(sizeOfArray);
+            fillAndSortArrayOfArrays(isPrint, sizeOfArray);
+            unionOfResults(arrayOfArrays, finalArray, countOfThreads);
+            finalArrayTest(isPrint);
+        }
+        else
+            System.out.println((char) 27 + "[31m" +"\n" + "The size of array isn't divisible by the count of threads!"+ (char)27 + "[0m");
     }
 
     public void initArrayOfArrays(int size){
@@ -73,7 +87,6 @@ public class ParallelSort implements Sort{
         }
     }
 
-    //TODO think!!!
     public void unionOfResults(int[][] arrayOfArrays, int[] outputArray, int countOfThread){
         if(countOfThread/2 == 1){
             mergeSort(arrayOfArrays[0], arrayOfArrays[1], outputArray);
