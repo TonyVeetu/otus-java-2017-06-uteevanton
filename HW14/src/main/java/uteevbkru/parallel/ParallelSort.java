@@ -2,16 +2,19 @@ package uteevbkru.parallel;
 
 import uteevbkru.helper.SortHelper;
 
+import javax.lang.model.type.ErrorType;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static java.lang.System.exit;
 import static uteevbkru.helper.SortHelper.testingFinalArray;
 
 public class ParallelSort implements Sort{
+    private ExecutorService threadPool;
     private AtomicInteger counterOfThread = new AtomicInteger(0);
-    CountDownLatch latch;
     private int countOfThreads;
     private int sizeOfArray;
     int[] array;
@@ -20,7 +23,7 @@ public class ParallelSort implements Sort{
     private boolean isPrint = false;
 
     public ParallelSort(int countOfThreads, boolean isPrint){
-        latch = new CountDownLatch(countOfThreads);
+        threadPool = Executors.newFixedThreadPool(countOfThreads);
         if(powerOfTwo(countOfThreads) != -1) {
             this.countOfThreads = countOfThreads;
             this.isPrint = isPrint;
@@ -32,56 +35,63 @@ public class ParallelSort implements Sort{
     }
 
     public ParallelSort(int countOfThreads){
-        latch = new CountDownLatch(countOfThreads);
-        if(powerOfTwo(countOfThreads) != -1) {
+        threadPool = Executors.newFixedThreadPool(countOfThreads);
+
+        if(powerOfTwo(countOfThreads) != -1)
             this.countOfThreads = countOfThreads;
-        }
         else
             System.out.println((char) 27 + "[31mYou must use count of " +
                     "thread equal powerOfTwo!" +
                     "( size%count_thread = 0!)" + (char)27 + "[0m");
     }
 
-    /**
-        Размер массива должен делиться на количество потоков без остатка!!!
-     */
-    public void sort(List<Integer> list){
-        if(list.size() % countOfThreads == 0) {
+
+    //TODO Размер массива должен быть любым!!
+    public void sort(List<Integer> list) {
             sizeOfArray = list.size();
             array = list.stream().mapToInt(i -> i).toArray();
             finalArray = new int[sizeOfArray];
 
             initArrayOfArrays(sizeOfArray);
-            fillAndSortArrayOfArrays(isPrint, sizeOfArray);
+            sortArrayOfArrays();
             unionOfResults(arrayOfArrays, finalArray, countOfThreads);
             finalArrayTest(isPrint);
-        }
-        else
-            System.out.println((char) 27 + "[31m" +"\n" + "The size of array isn't divisible by the count of threads!"+ (char)27 + "[0m");
+            threadPool.shutdown();
     }
 
     public void initArrayOfArrays(int size){
         arrayOfArrays = new int[countOfThreads][size/countOfThreads];
         for(int currentArray = 0; currentArray < arrayOfArrays.length; currentArray++) {
-            arrayOfArrays[currentArray] = new int[size/countOfThreads];
+            if(currentArray == countOfThreads -1)
+                arrayOfArrays[currentArray] = new int[size - (size / countOfThreads) * currentArray];//Последний подмассив длинее всех!
+            else
+                arrayOfArrays[currentArray] = new int[size/countOfThreads];
         }
     }
 
-    public void fillAndSortArrayOfArrays(boolean isPrint, int size){
-        long timeStart = System.currentTimeMillis();
-        for(int i = 0; i < countOfThreads; i++) {
-            Thread sortThread = new SortThread(size);
-            sortThread.start();
-        }
+    public void sortArrayOfArrays(){
         try {
-            latch.await();
+            fillAndSortArrayOfArrays(isPrint, sizeOfArray);
         }
         catch (InterruptedException e ){
             e.printStackTrace();
         }
-        long timeFinish = System.currentTimeMillis();
+        catch (ExecutionException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void fillAndSortArrayOfArrays(boolean isPrint, int size) throws  InterruptedException, ExecutionException{
+        List<Future<Boolean>> futures = new ArrayList<>(countOfThreads);
+        for(int i = 0; i < countOfThreads; i++) {
+            futures.add(threadPool.submit(new SortThread(size)));
+        }
+        for(Future<Boolean> future : futures){
+            if(!future.get()) {
+                exit(0);
+            }
+        }
         if(isPrint) {
-            System.out.println("\n"+"Time for parallel work: "+(timeFinish-timeStart));
             System.out.println("\t" + "ArrayOfArrays:");
             SortHelper.printArrayOfArrays(arrayOfArrays);
         }
@@ -113,10 +123,6 @@ public class ParallelSort implements Sort{
             System.out.println((char) 27 + "[33m" +"\n" + "Success! FinalArray was sorted!!"+ (char)27 + "[0m");
     }
 
-    /**
-     * @param value
-     * @return 2^return value = param value or -1;
-     */
     private int powerOfTwo(int value){
         if(value % 2 == 0 && value > 1) {
             return 1 + powerOfTwo(value/2);
@@ -129,51 +135,59 @@ public class ParallelSort implements Sort{
         }
     }
 
-    /**
-     * @param inputArray1 - length x
-     * @param inputArray2 - length x
-     * @param outputArray - length 2*x
-     */
-    public static void mergeSort(int[] inputArray1, int[] inputArray2, int[] outputArray) {
-        int i=0, j=0;
-        for (int k=0; k<outputArray.length; k++) {
+    public static void mergeSort(int[] input1, int[] input2, int[] output) {
+        int index = 0;
+        int index1 = 0;
+        int index2 = 0;
 
-            if (i > inputArray1.length-1) {
-                int a = inputArray2[j];
-                outputArray[k] = a;
-                j++;
+        while (index < output.length) {
+            boolean isBreak = false;
+
+            if (index1 == input1.length) {
+                System.arraycopy(input2, index2, output, index, input2.length - index2);
+                isBreak = true;
             }
-            else if (j > inputArray2.length-1) {
-                int a = inputArray1[i];
-                outputArray[k] = a;
-                i++;
+            if (index2 == input2.length) {
+                System.arraycopy(input1, index1, output, index, input1.length - index1);
+                isBreak = true;
             }
-            else if (inputArray1[i] < inputArray2[j]) {
-                int a = inputArray1[i];
-                outputArray[k] = a;
-                i++;
+
+            if (isBreak) {
+                break;
             }
-            else {
-                int b = inputArray2[j];
-                outputArray[k] = b;
-                j++;
+
+            if (input1[index1] < input2[index2]) {
+                output[index] = input1[index1];
+                index1++;
+            } else {
+                output[index] = input2[index2];
+                index2++;
             }
+
+            index++;
         }
     }
 
-    private class SortThread extends Thread{
+    private class SortThread implements Callable<Boolean>{
         private int size;
         public SortThread(int size){
             this.size = size;
         }
+
         @Override
-        public void run(){
+        public Boolean call(){
             int currentThread = counterOfThread.getAndIncrement();
-            int from = (size / countOfThreads) * currentThread;
-            int to = ((size / countOfThreads) * (currentThread + 1));
+            int from, to;
+            from = (size / countOfThreads) * currentThread;
+            if(currentThread != countOfThreads - 1)
+                to = ((size / countOfThreads) * (currentThread + 1));
+            else
+                to = size;
+            System.out.println("from = " + from + "to = " + to);
             arrayOfArrays[currentThread] = Arrays.copyOfRange(array, from, to);
             Arrays.sort(arrayOfArrays[currentThread]);
-            latch.countDown();
+            return true;
         }
     }
+
 }
