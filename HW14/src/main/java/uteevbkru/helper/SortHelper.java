@@ -37,9 +37,7 @@ public class SortHelper {
         }
     }
 
-    public static boolean testingFinalArray(int[] array, boolean isPrint){
-        if(isPrint)
-            printArray(array);
+    public static boolean testingFinalArray(int[] array){
         if( array != null){
             for(int i = 0; i < array.length - 1; i++){
                 if(array[i] > array[i+1])

@@ -12,9 +12,9 @@ public class mainObject {
         boolean isPrint = true;
 
         List<Integer> array = new ArrayList<>();
-        SortHelper.fillListWithRandomValue(isPrint, array, 13, 100);
+        SortHelper.fillListWithRandomValue(isPrint, array, 27, 100);
 
-        ParallelSort parallelSort = new ParallelSort(4, isPrint);
+        ParallelSort parallelSort = new ParallelSort(4);
         parallelSort.sort(array);
     }
 
