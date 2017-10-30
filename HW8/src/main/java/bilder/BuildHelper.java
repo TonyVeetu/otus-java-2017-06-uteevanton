@@ -11,7 +11,7 @@ import java.util.Set;
 
 import static bilder.help.*;
 
-public class BuildHelper {
+public class BuildHelper implements JsonUteev{
 
     public static JsonArrayBuilder fillArrayBuilder(JsonArrayBuilder builder, Object array) {
         if (array instanceof Collection) {
@@ -88,24 +88,17 @@ public class BuildHelper {
         }
     }
 
-    public JsonArray toJson(Object object){
+    @Override
+    public String toJson(Object object){
         JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
-        addObjectToArrayBuilder(arrayBuilder, object);
-        return arrayBuilder.build();
-    }
-
-    public JsonObject toJson1(Object object){
         JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
-        if(!isArrayObject(object))
-            fillObjectBuilder(objectBuilder, object);
-        return objectBuilder.build();
-    }
-
-    public JsonArray toJson2(Object object) {
-        JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
-        if (isArrayObject(object))
+        if (isArrayObject(object)) {
             fillArrayBuilder(arrayBuilder, object);
-        return arrayBuilder.build();
+            return arrayBuilder.build().toString();
+        }
+        else {
+            fillObjectBuilder(objectBuilder, object);
+            return objectBuilder.build().toString();
+        }
     }
-
 }
