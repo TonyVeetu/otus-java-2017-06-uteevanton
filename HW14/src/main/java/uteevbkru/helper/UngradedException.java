@@ -5,6 +5,4 @@ public class UngradedException extends Exception{
     public UngradedException(String message){
         super(message);
     }
-
 }
-git
