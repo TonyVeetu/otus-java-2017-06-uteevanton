@@ -15,6 +15,7 @@ public class SortHelper {
     }
 
     public static void printArray(int[] array){
+        System.out.println("\n" + "Final Array: ");
         for(int i = 0; i < array.length; i++){
             System.out.print(array[i]+"\t");
         }
@@ -32,7 +33,7 @@ public class SortHelper {
             arrayWithRandomValue.add(rand.nextInt(maxRandomValue + 1));
         }
         if(isPrint){
-            System.out.println("\t"+"fillArray:");
+            System.out.println("\t"+"Input ArrayList with random value:");
             SortHelper.printList(arrayWithRandomValue);
         }
     }
