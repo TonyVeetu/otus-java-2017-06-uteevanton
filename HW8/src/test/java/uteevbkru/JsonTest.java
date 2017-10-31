@@ -20,13 +20,13 @@ public class JsonTest {
 
     @Test
     public void integerTest(){
-        Integer i = new Integer(5);
+        Integer i = 5;
         Assert.assertEquals(gson.toJson(i), buildHelper.toJson(i));
     }
 
     @Test
     public void doubleTest(){
-        Double d = new Double(5.2);
+        Double d = 5.2;
         Assert.assertEquals(gson.toJson(d), buildHelper.toJson(d));
     }
 
@@ -51,8 +51,8 @@ public class JsonTest {
     @Test
     public void arrayStringTest(){
         String[] f = new String[2];
-        f[0] = new String("Anton");
-        f[1] = new String("Alena");
+        f[0] = "Anton";
+        f[1] = "Alena";
         Assert.assertEquals(gson.toJson(f), buildHelper.toJson(f));
     }
 
@@ -72,8 +72,7 @@ public class JsonTest {
 
     @Test
     public void booleanTest(){
-        Boolean b = true;
-        Assert.assertEquals(gson.toJson(b), buildHelper.toJson(b));
+        Assert.assertEquals(gson.toJson(true), buildHelper.toJson(true));
     }
 
 

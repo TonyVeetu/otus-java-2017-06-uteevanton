@@ -13,7 +13,7 @@ import static bilder.help.*;
 
 public class BuildHelper implements JsonUteev{
 
-    public static JsonArrayBuilder fillArrayBuilder(JsonArrayBuilder builder, Object array) {
+    private JsonArrayBuilder fillArrayBuilder(JsonArrayBuilder builder, Object array) {
         if (array instanceof Collection) {
             Collection collection = (Collection) array;
             for (Object obj : collection) {
@@ -29,7 +29,7 @@ public class BuildHelper implements JsonUteev{
         return builder;
     }
 
-    public static JsonObjectBuilder fillObjectBuilder(JsonObjectBuilder builder, Object object) {
+    private JsonObjectBuilder fillObjectBuilder(JsonObjectBuilder builder, Object object) {
         if (object instanceof Map) {
             Map map = (Map) object;
             Set<Map.Entry> entrySet = map.entrySet();
@@ -52,7 +52,7 @@ public class BuildHelper implements JsonUteev{
         return builder;
     }
 
-    public static void addObjectToArrayBuilder(JsonArrayBuilder arrayBuilder, Object obj) {
+    private void addObjectToArrayBuilder(JsonArrayBuilder arrayBuilder, Object obj) {
         if (isNullObject(obj)) {
             arrayBuilder.addNull();
         } else if (isStringObject(obj)) {
@@ -70,7 +70,7 @@ public class BuildHelper implements JsonUteev{
         }
     }
 
-    public static void addObjectToObjectBuilder(JsonObjectBuilder objectBuilder, String name, Object obj) {
+    private void addObjectToObjectBuilder(JsonObjectBuilder objectBuilder, String name, Object obj) {
         if (isNullObject(obj)) {
             objectBuilder.addNull(name);
         } else if (isStringObject(obj)) {
