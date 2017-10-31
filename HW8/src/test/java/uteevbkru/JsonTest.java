@@ -67,8 +67,13 @@ public class JsonTest {
         Atm a1 = new Atm();
         Atm a2 = new Atm();
         Atm[] atm = {a1,a2};
-
         Assert.assertEquals(gson.toJson(atm), buildHelper.toJson(atm));
+    }
+
+    @Test
+    public void booleanTest(){
+        Boolean b = true;
+        Assert.assertEquals(gson.toJson(b), buildHelper.toJson(b));
     }
 
 

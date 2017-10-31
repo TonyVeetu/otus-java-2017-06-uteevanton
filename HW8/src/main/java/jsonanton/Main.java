@@ -12,5 +12,6 @@ public class Main {
         Atm atm = new Atm();
         System.out.println("toJson " + "\n" + buildHelper.toJson(atm));
         System.out.println("toGson " + "\n" + gson.toJson(atm) + "\n" + "\n");
+
     }
 }
