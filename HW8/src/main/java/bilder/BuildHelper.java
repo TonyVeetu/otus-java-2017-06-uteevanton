@@ -92,12 +92,25 @@ public class BuildHelper implements JsonUteev{
     public String toJson(Object object){
         JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
         JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+        if (isNullObject(object)) {
+            return "null";
+        }
         if (isArrayObject(object)) {
             fillArrayBuilder(arrayBuilder, object);
             return arrayBuilder.build().toString();
         }
         else {
-            fillObjectBuilder(objectBuilder, object);
+            if (isStringObject(object)) {
+                return "\"" + object.toString() + "\"";
+            } else if (isDecimalNumberObject(object)) {
+                return object.toString();
+            } else if (isIntegerNumberObject(object)) {
+                return object.toString();
+            } else if (isBooleanObject(object)) {
+                return object.toString();
+            } else {
+                fillObjectBuilder(objectBuilder, object);
+            }
             return objectBuilder.build().toString();
         }
     }
