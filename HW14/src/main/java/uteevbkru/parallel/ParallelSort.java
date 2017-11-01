@@ -30,6 +30,7 @@ public class ParallelSort implements Sort{
                     "( size%count_thread = 0!)" + (char)27 + "[0m");
     }
 
+    @Override
     public void sort(List<Integer> list) {
             sizeOfArray = list.size();
             array = list.stream().mapToInt(i -> i).toArray();
