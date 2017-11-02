@@ -1,12 +1,11 @@
 package uteevbkru.parallel;
 
-
+import uteevbkru.helper.UngradedException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import static java.lang.System.exit;
 import static uteevbkru.helper.SortHelper.testingFinalArray;
 
@@ -39,8 +38,17 @@ public class ParallelSort implements Sort{
             initArrayOfArrays(sizeOfArray);
             sortArrayOfArrays();
             unionOfResults(arrayOfArrays, finalArray, countOfThreads);
-            finalArrayTest();
+            testArray();
             threadPool.shutdown();
+    }
+
+    private void testArray(){
+        try {
+            finalArrayTest();
+        }
+        catch (UngradedException e){
+            e.printStackTrace();
+        }
     }
 
     private void initArrayOfArrays(int size){
@@ -54,53 +62,59 @@ public class ParallelSort implements Sort{
     }
 
     private void sortArrayOfArrays(){
-        try {
-            fillAndSortArrayOfArrays(sizeOfArray);
-        }
-        catch (InterruptedException | ExecutionException e ){
-            e.printStackTrace();
-        }
+        List<Future<Boolean>> futures = new ArrayList<>(countOfThreads);
+        creationCallableThreadsInThreadPool(sizeOfArray, futures);
+        checkReturnValueInCallableThread(futures);
     }
 
-    private void fillAndSortArrayOfArrays(int size) throws  InterruptedException, ExecutionException{
-        List<Future<Boolean>> futures = new ArrayList<>(countOfThreads);
+    private void creationCallableThreadsInThreadPool(int size, List<Future<Boolean>> futures){
         for(int i = 0; i < countOfThreads; i++) {
-            futures.add(threadPool.submit(new SortThread(size)));
+            futures.add(threadPool.submit(new SortedThread(size)));
         }
+
+    }
+
+    private void  checkReturnValueInCallableThread(List<Future<Boolean>> futures){
         for(Future<Boolean> future : futures){
-            if(!future.get()) {
-                exit(0);
+            try {
+                if (!future.get())
+                    exit(0);//Всегда у Callable нужно вызывать блокирующий get()!
+            }
+            catch (InterruptedException | ExecutionException e ){
+                e.printStackTrace();
             }
         }
     }
 
-    private void unionOfResults(int[][] arrayOfArrays, int[] outputArray, int countOfThread){
-        if(countOfThread/2 == 1){
+    private void unionOfResults(int[][] arrayOfArrays, int[] outputArray, int countOfThreads){
+        if(countOfThreads/2 == 1){
             mergeSort(arrayOfArrays[0], arrayOfArrays[1], outputArray);
         }
         else {
-            int size =  sizeOfArray /countOfThread;
-            int[][] reservedArray = new int[countOfThread/2][size*2];
-            int s = 0;
-            for(int k = 0; k < countOfThread/2; k++){
-                reservedArray[k] = new int[arrayOfArrays[s].length + arrayOfArrays[++s].length];
-                s++;
-            }
+            int[][] reservedArray = initReservedArray(countOfThreads);
             int j = 0;
-            for(int i = 0; i < countOfThread/2; i++){
+            for(int i = 0; i < countOfThreads/2; i++){
                 mergeSort(arrayOfArrays[j], arrayOfArrays[++j] ,reservedArray[i]);// Занимательно, что нужно ++j, а j++ работать не будет! Что и логично!
                 ++j;
             }
-            unionOfResults(reservedArray, outputArray,countOfThread/2);
+            unionOfResults(reservedArray, outputArray,countOfThreads/2);
         }
     }
 
-    private void finalArrayTest(){
-        if (testingFinalArray(finalArray)) {
-            System.out.println((char) 27 + "[33m" +"\n" + "Success! FinalArray was sorted!!"+ (char)27 + "[0m");
-        } else {
-            System.out.println((char) 27 + "[31m" + "\n" + "***_Error_***!!! FinalArray wasn't sorted!!" + (char) 27 + "[0m");
+    private int[][] initReservedArray(int countOfThreads){
+        int size =  sizeOfArray /countOfThreads;
+        int[][] mass = new int[countOfThreads/2][size*2];
+        int s = 0;
+        for(int k = 0; k < countOfThreads/2; k++){
+            mass[k] = new int[arrayOfArrays[s].length + arrayOfArrays[++s].length];
+            s++;
         }
+        return mass;
+    }
+
+    private void finalArrayTest() throws UngradedException {
+        if (!testingFinalArray(finalArray))
+            throw new UngradedException("Array is ungraded!");
     }
 
     private int powerOfTwo(int value){
@@ -144,10 +158,11 @@ public class ParallelSort implements Sort{
         }
     }
 
-    private class SortThread implements Callable<Boolean>{
+    private class SortedThread implements Callable<Boolean>{
         private int size;
-        SortThread(int size){
-            this.size = size;
+        SortedThread(int size){
+            if(size > 0)
+                this.size = size;
         }
 
         @Override
